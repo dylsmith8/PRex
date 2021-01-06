@@ -45,15 +45,17 @@ namespace PullRequestExtractor
             this.dgvPRs = new System.Windows.Forms.DataGridView();
             this.grpPRs = new System.Windows.Forms.GroupBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.pButtons = new System.Windows.Forms.Panel();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
+            this.pButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(89, 679);
+            this.button1.Location = new System.Drawing.Point(97, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -63,7 +65,7 @@ namespace PullRequestExtractor
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(8, 679);
+            this.button2.Location = new System.Drawing.Point(16, 16);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -73,8 +75,6 @@ namespace PullRequestExtractor
             // 
             // grpActiveSettings
             // 
-            this.grpActiveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpActiveSettings.Controls.Add(this.lblStatusText);
             this.grpActiveSettings.Controls.Add(this.lblStatusColour);
             this.grpActiveSettings.Controls.Add(this.lblTokenAuthed);
@@ -82,9 +82,10 @@ namespace PullRequestExtractor
             this.grpActiveSettings.Controls.Add(this.lblOrgPlaceHolder);
             this.grpActiveSettings.Controls.Add(this.lblProject);
             this.grpActiveSettings.Controls.Add(this.lblOrg);
+            this.grpActiveSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.grpActiveSettings.Location = new System.Drawing.Point(0, 0);
             this.grpActiveSettings.Name = "grpActiveSettings";
-            this.grpActiveSettings.Size = new System.Drawing.Size(1190, 65);
+            this.grpActiveSettings.Size = new System.Drawing.Size(1194, 65);
             this.grpActiveSettings.TabIndex = 2;
             this.grpActiveSettings.TabStop = false;
             this.grpActiveSettings.Text = "Active Settings";
@@ -93,7 +94,7 @@ namespace PullRequestExtractor
             // 
             this.lblStatusText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatusText.BackColor = System.Drawing.Color.Transparent;
-            this.lblStatusText.Location = new System.Drawing.Point(657, 24);
+            this.lblStatusText.Location = new System.Drawing.Point(661, 24);
             this.lblStatusText.Name = "lblStatusText";
             this.lblStatusText.Size = new System.Drawing.Size(55, 19);
             this.lblStatusText.TabIndex = 9;
@@ -105,7 +106,7 @@ namespace PullRequestExtractor
             this.lblStatusColour.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatusColour.BackColor = System.Drawing.Color.LimeGreen;
             this.lblStatusColour.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblStatusColour.Location = new System.Drawing.Point(637, 28);
+            this.lblStatusColour.Location = new System.Drawing.Point(641, 28);
             this.lblStatusColour.Name = "lblStatusColour";
             this.lblStatusColour.Size = new System.Drawing.Size(14, 13);
             this.lblStatusColour.TabIndex = 8;
@@ -157,7 +158,7 @@ namespace PullRequestExtractor
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(1115, 679);
+            this.btnExit.Location = new System.Drawing.Point(830, 16);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 3;
@@ -175,30 +176,42 @@ namespace PullRequestExtractor
             this.dgvPRs.Location = new System.Drawing.Point(3, 16);
             this.dgvPRs.Name = "dgvPRs";
             this.dgvPRs.ReadOnly = true;
-            this.dgvPRs.Size = new System.Drawing.Size(1180, 583);
+            this.dgvPRs.Size = new System.Drawing.Size(1180, 568);
             this.dgvPRs.TabIndex = 4;
             this.dgvPRs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPRs_CellDoubleClick);
             // 
             // grpPRs
             // 
+            this.grpPRs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpPRs.Controls.Add(this.dgvPRs);
-            this.grpPRs.Location = new System.Drawing.Point(4, 71);
+            this.grpPRs.Location = new System.Drawing.Point(0, 68);
             this.grpPRs.Name = "grpPRs";
-            this.grpPRs.Size = new System.Drawing.Size(1186, 602);
+            this.grpPRs.Size = new System.Drawing.Size(1186, 587);
             this.grpPRs.TabIndex = 5;
             this.grpPRs.TabStop = false;
             this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
+            // 
+            // pButtons
+            // 
+            this.pButtons.Controls.Add(this.button2);
+            this.pButtons.Controls.Add(this.button1);
+            this.pButtons.Controls.Add(this.btnExit);
+            this.pButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pButtons.Location = new System.Drawing.Point(0, 661);
+            this.pButtons.Name = "pButtons";
+            this.pButtons.Size = new System.Drawing.Size(1194, 53);
+            this.pButtons.TabIndex = 6;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1194, 714);
-            this.Controls.Add(this.grpPRs);
-            this.Controls.Add(this.btnExit);
             this.Controls.Add(this.grpActiveSettings);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.grpPRs);
+            this.Controls.Add(this.pButtons);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "PREx";
@@ -208,6 +221,7 @@ namespace PullRequestExtractor
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).EndInit();
             this.grpPRs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
+            this.pButtons.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -228,6 +242,7 @@ namespace PullRequestExtractor
         private System.Windows.Forms.Label lblStatusColour;
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.Label lblStatusText;
+        private System.Windows.Forms.Panel pButtons;
     }
 }
 
