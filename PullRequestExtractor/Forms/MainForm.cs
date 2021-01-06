@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Tulpep.NotificationWindow;
 
 namespace PullRequestExtractor
 {
@@ -23,6 +24,8 @@ namespace PullRequestExtractor
         public event GetPullRequestsDelegate GetPullRequests;
 
         private CancellationTokenSource _cancellationTokenSource;
+
+        private List<PullRequestGridSource> _seenPullRequests = new List<PullRequestGridSource>();
 
         public MainForm(IAppSettings appSettings)
         {
@@ -64,7 +67,7 @@ namespace PullRequestExtractor
         private async void TestGetPRs_Click(object sender, EventArgs e)
         {
             PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
-            ParsePullRequestData(prs);
+            ParsePullRequestData(prs, true);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -105,7 +108,7 @@ namespace PullRequestExtractor
                 MessageBox.Show(sb.ToString());
                 try
                 {
-                    await ListenForNewPullRequests();
+                    await ListenForNewPullRequests(true);
                 }
                 catch (TaskCanceledException ex) { MessageBox.Show("Poll attempts ended."); }
             }
@@ -116,33 +119,52 @@ namespace PullRequestExtractor
             }
         }
 
-        private async Task ListenForNewPullRequests()
+        private async Task ListenForNewPullRequests(bool isStartup)
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
                 PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
-                ParsePullRequestData(prs);
+                ParsePullRequestData(prs, isStartup);
+                isStartup = false;
+
                 await Task.Delay(_pollingInterval, _cancellationTokenSource.Token);
             }
         }
 
-        private void ParsePullRequestData(PullRequest prs)
+        private void ParsePullRequestData(PullRequest prs, bool isStartup)
         {
-            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
+            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();           
 
             foreach (var pr in prs.value)
-                dgvSource.Add(new PullRequestGridSource
+            {
+                var src = new PullRequestGridSource
                 {
                     Title = pr.title,
                     Repo = pr.repository.name,
                     CreationDate = pr.creationDate,
                     Author = pr.createdBy.displayName,
                     Status = pr.status,
-                    Reviewers = string.Join(",", pr.reviewers.Select(x => x.displayName)),
+                    Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
                     SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
                     TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
                     CodeReviewId = pr.codeReviewId
-                });
+                };
+
+                dgvSource.Add(src);
+            }
+
+            if (!isStartup) // don't need to display toasts at start up
+            {
+                // check if there's new pull requests coming from the API to notify user about
+                // should only notify user if we haven't seen it before
+                var distict = dgvSource.Except(_seenPullRequests, new PullRequestComparer()).ToList();
+                if (distict.Count == 1)
+                    CreateToast(distict.Single().Title, distict.Single().Author);
+                else if (distict.Count >= 2)
+                    CreateToast(distict.Count);
+            }
+
+            _seenPullRequests = dgvSource;
 
             dgvPRs.DataSource = null;
             dgvPRs.AutoGenerateColumns = true;
@@ -152,6 +174,27 @@ namespace PullRequestExtractor
             dgvPRs.DataSource = dgvBindingSource;
             
             dgvPRs.Refresh();
+        }
+
+        private static void CreateToast(int newPrs)
+        {
+            DisplayToast("New pull requests for your attention", $"{newPrs} Pull Requests have been added.");
+        }
+
+        private static void CreateToast(string pullRequestName, string author)
+        {
+            DisplayToast("A new pull request has been added", $"A new pull request with title {pullRequestName} has been added by {author}.");
+        }
+
+        private static void DisplayToast(string title, string content)
+        {
+            using (PopupNotifier notifier = new PopupNotifier())
+            {
+                notifier.TitleText = title;
+                notifier.ContentText = content;
+                notifier.IsRightToLeft = false;
+                notifier.Popup();
+            }
         }
     }
 }

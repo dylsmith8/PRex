@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PullRequestExtractor.Models
 {
@@ -16,5 +17,25 @@ namespace PullRequestExtractor.Models
         public string SourceBranch { get; set; }
         public string TargetBranch { get; set; }
         public int CodeReviewId { get; set; }
+    }
+
+    public class PullRequestComparer : IEqualityComparer<PullRequestGridSource>
+    {
+        public bool Equals(PullRequestGridSource x, PullRequestGridSource y)
+        {
+            if (x == null && y == null)
+                return true;
+            else if (x == null || y == null)
+                return false;
+            else if (x.CodeReviewId == y.CodeReviewId)
+                return true;
+            else
+                return false;
+        }
+
+        public int GetHashCode(PullRequestGridSource obj)
+        {
+            return obj.CodeReviewId.GetHashCode();
+        }
     }
 }
