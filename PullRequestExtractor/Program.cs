@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PullRequestExtractor.Presenters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,12 @@ namespace PullRequestExtractor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            
+            using (MainPresenter presenter = new MainPresenter())
+            {
+                presenter.Start();
+                Application.Run();
+            }
         }
     }
 }

@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PullRequestExtractor.Models
+namespace PullRequestExtractor.Models.PullRequests
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Project
     {
         public string id { get; set; }
@@ -83,10 +79,9 @@ namespace PullRequestExtractor.Models
         public bool supportsIterations { get; set; }
     }
 
-    public class Root
+    public class PullRequest
     {
         public List<Value> value { get; set; }
         public int count { get; set; }
     }
-
 }
