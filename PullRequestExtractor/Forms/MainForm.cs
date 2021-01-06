@@ -1,6 +1,5 @@
 ﻿using PullRequestExtractor.Interfaces;
 using PullRequestExtractor.Models;
-using PullRequestExtractor.Models.Projects;
 using PullRequestExtractor.Models.PullRequests;
 using System;
 using System.Collections.Generic;
@@ -8,6 +7,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PullRequestExtractor
@@ -19,6 +20,8 @@ namespace PullRequestExtractor
 
         public event GetProjectsDelegate GetProjects;
         public event GetPullRequestsDelegate GetPullRequests;
+
+        private CancellationTokenSource _cancellationTokenSource;
 
         public MainForm(IAppSettings appSettings)
         {
@@ -34,6 +37,7 @@ namespace PullRequestExtractor
             InitializeComponent();
             lblOrgPlaceHolder.Text = _org;
             lblProjectPlaceHolder.Text = _project;
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         private async void TestGetProjects_Click(object sender, EventArgs e)
@@ -52,31 +56,12 @@ namespace PullRequestExtractor
         private async void TestGetPRs_Click(object sender, EventArgs e)
         {
             PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
-            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
-
-            foreach (var pr in prs.value)
-                dgvSource.Add(new PullRequestGridSource
-                {
-                    Title = pr.title,
-                    Repo = pr.repository.name,
-                    CreationDate = pr.creationDate,
-                    Author = pr.createdBy.displayName,
-                    Status = pr.status,
-                    Reviewers = string.Join(",", pr.reviewers.Select(x => x.displayName)),
-                    SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
-                    TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
-                    CodeReviewId = pr.codeReviewId
-                });
-
-            var dgvBindingSource = new BindingSource(dgvSource, null);
-            dgvPRs.DataSource = dgvBindingSource;
-            dgvPRs.AutoGenerateColumns = true;
-            dgvPRs.Refresh();
-
+            ParsePullRequestData(prs);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
         {
+            _cancellationTokenSource.Cancel();
             Application.Exit();
         }
 
@@ -89,12 +74,7 @@ namespace PullRequestExtractor
             string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
 
             Debug.WriteLine(uri);
-            OpenPullRequest(uri);
-        }
-
-        private static void OpenPullRequest(string prUrl)
-        {
-            Process.Start(prUrl);
+            Process.Start(uri);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -111,14 +91,57 @@ namespace PullRequestExtractor
 
                 foreach (var project in projects.value)
                     sb.AppendLine(project.name);
-                
+
                 MessageBox.Show(sb.ToString());
+                try
+                {
+                    await ListenForNewPullRequests();
+                }
+                catch (TaskCanceledException ex) { MessageBox.Show("Poll attempts ended."); }
             }
             else
             {
                 lblStatusText.Text = "Failed";
                 lblStatusColour.BackColor = Color.Orange;
             }
+        }
+
+        private async Task ListenForNewPullRequests()
+        {
+            while (!_cancellationTokenSource.IsCancellationRequested)
+            {
+                PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
+                ParsePullRequestData(prs);
+                await Task.Delay(10000, _cancellationTokenSource.Token);
+            }
+        }
+
+        private void ParsePullRequestData(PullRequest prs)
+        {
+            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
+
+            foreach (var pr in prs.value)
+                dgvSource.Add(new PullRequestGridSource
+                {
+                    Title = pr.title,
+                    Repo = pr.repository.name,
+                    CreationDate = pr.creationDate,
+                    Author = pr.createdBy.displayName,
+                    Status = pr.status,
+                    Reviewers = string.Join(",", pr.reviewers.Select(x => x.displayName)),
+                    SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
+                    TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
+                    CodeReviewId = pr.codeReviewId
+                });
+
+            dgvPRs.DataSource = null;
+            dgvPRs.AutoGenerateColumns = true;
+            dgvPRs.Refresh();
+
+            var dgvBindingSource = new BindingSource(dgvSource, null);
+            dgvPRs.DataSource = dgvBindingSource;
+            
+            dgvPRs.Refresh();
         }
     }
 }

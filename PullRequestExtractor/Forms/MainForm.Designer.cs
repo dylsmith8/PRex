@@ -34,7 +34,6 @@ namespace PullRequestExtractor
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.grpActiveSettings = new System.Windows.Forms.GroupBox();
-            this.lblStatusText = new System.Windows.Forms.Label();
             this.lblStatusColour = new System.Windows.Forms.Label();
             this.lblTokenAuthed = new System.Windows.Forms.Label();
             this.lblProjectPlaceHolder = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@ namespace PullRequestExtractor
             this.grpPRs = new System.Windows.Forms.GroupBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.pButtons = new System.Windows.Forms.Panel();
+            this.lblStatusText = new System.Windows.Forms.Label();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -89,17 +89,6 @@ namespace PullRequestExtractor
             this.grpActiveSettings.TabIndex = 2;
             this.grpActiveSettings.TabStop = false;
             this.grpActiveSettings.Text = "Active Settings";
-            // 
-            // lblStatusText
-            // 
-            this.lblStatusText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatusText.BackColor = System.Drawing.Color.Transparent;
-            this.lblStatusText.Location = new System.Drawing.Point(661, 24);
-            this.lblStatusText.Name = "lblStatusText";
-            this.lblStatusText.Size = new System.Drawing.Size(55, 19);
-            this.lblStatusText.TabIndex = 9;
-            this.lblStatusText.Text = "[Runtime]";
-            this.lblStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblStatusColour
             // 
@@ -158,7 +147,7 @@ namespace PullRequestExtractor
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(830, 16);
+            this.btnExit.Location = new System.Drawing.Point(1108, 16);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
             this.btnExit.TabIndex = 3;
@@ -204,6 +193,15 @@ namespace PullRequestExtractor
             this.pButtons.Size = new System.Drawing.Size(1194, 53);
             this.pButtons.TabIndex = 6;
             // 
+            // lblStatusText
+            // 
+            this.lblStatusText.AutoSize = true;
+            this.lblStatusText.Location = new System.Drawing.Point(661, 27);
+            this.lblStatusText.Name = "lblStatusText";
+            this.lblStatusText.Size = new System.Drawing.Size(52, 13);
+            this.lblStatusText.TabIndex = 9;
+            this.lblStatusText.Text = "[Runtime]";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,8 +239,8 @@ namespace PullRequestExtractor
         private System.Windows.Forms.Label lblTokenAuthed;
         private System.Windows.Forms.Label lblStatusColour;
         private System.Windows.Forms.BindingSource bindingSource1;
-        private System.Windows.Forms.Label lblStatusText;
         private System.Windows.Forms.Panel pButtons;
+        private System.Windows.Forms.Label lblStatusText;
     }
 }
 

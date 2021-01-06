@@ -25,7 +25,7 @@ namespace PullRequestExtractor.Managers
                 throw new InvalidOperationException("Could not find a Organisation for Azure DevOps");
         }
 
-        // error handling
+        // error handling and use params to be more specific in API request
         internal async Task<PullRequest> GetPullRequestsAsync(string organisation, string project)
         {
             using (HttpClient client = new HttpClient())
