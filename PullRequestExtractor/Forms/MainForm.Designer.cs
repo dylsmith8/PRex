@@ -34,6 +34,7 @@ namespace PullRequestExtractor
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.grpActiveSettings = new System.Windows.Forms.GroupBox();
+            this.lblStatusText = new System.Windows.Forms.Label();
             this.lblStatusColour = new System.Windows.Forms.Label();
             this.lblTokenAuthed = new System.Windows.Forms.Label();
             this.lblProjectPlaceHolder = new System.Windows.Forms.Label();
@@ -45,7 +46,6 @@ namespace PullRequestExtractor
             this.grpPRs = new System.Windows.Forms.GroupBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.pButtons = new System.Windows.Forms.Panel();
-            this.lblStatusText = new System.Windows.Forms.Label();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -89,6 +89,15 @@ namespace PullRequestExtractor
             this.grpActiveSettings.TabIndex = 2;
             this.grpActiveSettings.TabStop = false;
             this.grpActiveSettings.Text = "Active Settings";
+            // 
+            // lblStatusText
+            // 
+            this.lblStatusText.AutoSize = true;
+            this.lblStatusText.Location = new System.Drawing.Point(661, 27);
+            this.lblStatusText.Name = "lblStatusText";
+            this.lblStatusText.Size = new System.Drawing.Size(52, 13);
+            this.lblStatusText.TabIndex = 9;
+            this.lblStatusText.Text = "[Runtime]";
             // 
             // lblStatusColour
             // 
@@ -193,15 +202,6 @@ namespace PullRequestExtractor
             this.pButtons.Size = new System.Drawing.Size(1194, 53);
             this.pButtons.TabIndex = 6;
             // 
-            // lblStatusText
-            // 
-            this.lblStatusText.AutoSize = true;
-            this.lblStatusText.Location = new System.Drawing.Point(661, 27);
-            this.lblStatusText.Name = "lblStatusText";
-            this.lblStatusText.Size = new System.Drawing.Size(52, 13);
-            this.lblStatusText.TabIndex = 9;
-            this.lblStatusText.Text = "[Runtime]";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -212,7 +212,7 @@ namespace PullRequestExtractor
             this.Controls.Add(this.pButtons);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "PREx";
+            this.Text = "PREx - An Azure DevOps Pull Request Parser";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.grpActiveSettings.ResumeLayout(false);
             this.grpActiveSettings.PerformLayout();

@@ -17,6 +17,7 @@ namespace PullRequestExtractor
     {
         private readonly string _project;
         private readonly string _org;
+        private readonly int _pollingInterval;
 
         public event GetProjectsDelegate GetProjects;
         public event GetPullRequestsDelegate GetPullRequests;
@@ -32,7 +33,14 @@ namespace PullRequestExtractor
                 throw new InvalidOperationException("Could not find a valid personal access token for Azure DevOps");
 
             if (!appSettings.TryGetAppSetting("Org", out _org))
-                throw new InvalidOperationException("Could not find a Organisation for Azure DevOps");
+                throw new InvalidOperationException("Could not find an Organisation for Azure DevOps");
+
+            string pollingInterval;
+            if (!appSettings.TryGetAppSetting("PollingInterval", out pollingInterval))
+                throw new InvalidOperationException("Could not find a valid polling interval");
+
+            if (!int.TryParse(pollingInterval, out _pollingInterval))
+                throw new InvalidOperationException("Could not parse the polling interval");
 
             InitializeComponent();
             lblOrgPlaceHolder.Text = _org;
@@ -92,6 +100,8 @@ namespace PullRequestExtractor
                 foreach (var project in projects.value)
                     sb.AppendLine(project.name);
 
+                sb.AppendLine("\nPull request polling will initiate automatically and the UI will update accordingly.");
+
                 MessageBox.Show(sb.ToString());
                 try
                 {
@@ -112,7 +122,7 @@ namespace PullRequestExtractor
             {
                 PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
                 ParsePullRequestData(prs);
-                await Task.Delay(10000, _cancellationTokenSource.Token);
+                await Task.Delay(_pollingInterval, _cancellationTokenSource.Token);
             }
         }
 
