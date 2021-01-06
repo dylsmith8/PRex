@@ -29,9 +29,14 @@ namespace PullRequestExtractor
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.grpActiveSettings = new System.Windows.Forms.GroupBox();
+            this.lblStatusText = new System.Windows.Forms.Label();
+            this.lblStatusColour = new System.Windows.Forms.Label();
+            this.lblTokenAuthed = new System.Windows.Forms.Label();
             this.lblProjectPlaceHolder = new System.Windows.Forms.Label();
             this.lblOrgPlaceHolder = new System.Windows.Forms.Label();
             this.lblProject = new System.Windows.Forms.Label();
@@ -39,9 +44,11 @@ namespace PullRequestExtractor
             this.btnExit = new System.Windows.Forms.Button();
             this.dgvPRs = new System.Windows.Forms.DataGridView();
             this.grpPRs = new System.Windows.Forms.GroupBox();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -68,6 +75,9 @@ namespace PullRequestExtractor
             // 
             this.grpActiveSettings.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpActiveSettings.Controls.Add(this.lblStatusText);
+            this.grpActiveSettings.Controls.Add(this.lblStatusColour);
+            this.grpActiveSettings.Controls.Add(this.lblTokenAuthed);
             this.grpActiveSettings.Controls.Add(this.lblProjectPlaceHolder);
             this.grpActiveSettings.Controls.Add(this.lblOrgPlaceHolder);
             this.grpActiveSettings.Controls.Add(this.lblProject);
@@ -78,6 +88,36 @@ namespace PullRequestExtractor
             this.grpActiveSettings.TabIndex = 2;
             this.grpActiveSettings.TabStop = false;
             this.grpActiveSettings.Text = "Active Settings";
+            // 
+            // lblStatusText
+            // 
+            this.lblStatusText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblStatusText.BackColor = System.Drawing.Color.Transparent;
+            this.lblStatusText.Location = new System.Drawing.Point(657, 24);
+            this.lblStatusText.Name = "lblStatusText";
+            this.lblStatusText.Size = new System.Drawing.Size(55, 19);
+            this.lblStatusText.TabIndex = 9;
+            this.lblStatusText.Text = "[Runtime]";
+            this.lblStatusText.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // lblStatusColour
+            // 
+            this.lblStatusColour.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblStatusColour.BackColor = System.Drawing.Color.LimeGreen;
+            this.lblStatusColour.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblStatusColour.Location = new System.Drawing.Point(637, 28);
+            this.lblStatusColour.Name = "lblStatusColour";
+            this.lblStatusColour.Size = new System.Drawing.Size(14, 13);
+            this.lblStatusColour.TabIndex = 8;
+            // 
+            // lblTokenAuthed
+            // 
+            this.lblTokenAuthed.AutoSize = true;
+            this.lblTokenAuthed.Location = new System.Drawing.Point(538, 28);
+            this.lblTokenAuthed.Name = "lblTokenAuthed";
+            this.lblTokenAuthed.Size = new System.Drawing.Size(93, 13);
+            this.lblTokenAuthed.TabIndex = 4;
+            this.lblTokenAuthed.Text = "Token authorised:";
             // 
             // lblProjectPlaceHolder
             // 
@@ -147,7 +187,7 @@ namespace PullRequestExtractor
             this.grpPRs.Size = new System.Drawing.Size(1186, 602);
             this.grpPRs.TabIndex = 5;
             this.grpPRs.TabStop = false;
-            this.grpPRs.Text = "Active PRs";
+            this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
             // 
             // MainForm
             // 
@@ -159,12 +199,15 @@ namespace PullRequestExtractor
             this.Controls.Add(this.grpActiveSettings);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "PREx";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.grpActiveSettings.ResumeLayout(false);
             this.grpActiveSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).EndInit();
             this.grpPRs.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -181,6 +224,10 @@ namespace PullRequestExtractor
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.DataGridView dgvPRs;
         private System.Windows.Forms.GroupBox grpPRs;
+        private System.Windows.Forms.Label lblTokenAuthed;
+        private System.Windows.Forms.Label lblStatusColour;
+        private System.Windows.Forms.BindingSource bindingSource1;
+        private System.Windows.Forms.Label lblStatusText;
     }
 }
 

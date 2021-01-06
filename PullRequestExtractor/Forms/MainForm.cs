@@ -5,6 +5,7 @@ using PullRequestExtractor.Models.PullRequests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -62,8 +63,8 @@ namespace PullRequestExtractor
                     Author = pr.createdBy.displayName,
                     Status = pr.status,
                     Reviewers = string.Join(",", pr.reviewers.Select(x => x.displayName)),
-                    SourceBranch = pr.sourceRefName,
-                    TargetBranch = pr.targetRefName,
+                    SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
+                    TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
                     CodeReviewId = pr.codeReviewId
                 });
 
@@ -88,12 +89,36 @@ namespace PullRequestExtractor
             string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
 
             Debug.WriteLine(uri);
-            OpenPullRequest(uri);           
+            OpenPullRequest(uri);
         }
 
         private static void OpenPullRequest(string prUrl)
         {
             Process.Start(prUrl);
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            Models.Projects.Project projects = await GetProjects?.Invoke();
+
+            if (projects.value.Count > 0)
+            {
+                lblStatusText.Text = "Success";
+                lblStatusColour.BackColor = Color.LimeGreen;
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Authenticated projects:\n");
+
+                foreach (var project in projects.value)
+                    sb.AppendLine(project.name);
+                
+                MessageBox.Show(sb.ToString());
+            }
+            else
+            {
+                lblStatusText.Text = "Failed";
+                lblStatusColour.BackColor = Color.Orange;
+            }
         }
     }
 }
