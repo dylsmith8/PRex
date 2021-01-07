@@ -61,13 +61,21 @@ namespace PullRequestExtractor
             foreach (var project in projects.value)
                 sb.AppendLine(project.name);
 
-            MessageBox.Show(sb.ToString());
+            MessageBox.Show(sb.ToString(), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private async void TestGetPRs_Click(object sender, EventArgs e)
         {
-            PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
-            ParsePullRequestData(prs, true);
+            try
+            {
+                PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
+                ParsePullRequestData(prs, true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.Exit();
+            }
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -101,9 +109,9 @@ namespace PullRequestExtractor
             {
                 projects = await GetProjects?.Invoke();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 Application.Exit();
             }
 
@@ -120,12 +128,17 @@ namespace PullRequestExtractor
 
                 sb.AppendLine("\nPull request polling will initiate automatically and the UI will update accordingly.");
 
-                MessageBox.Show(sb.ToString());
+                MessageBox.Show(sb.ToString(), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 try
                 {
                     await ListenForNewPullRequests(true);
                 }
-                catch (TaskCanceledException ex) { MessageBox.Show("Poll attempts ended."); }
+                catch (TaskCanceledException) { MessageBox.Show("Poll attempts ended. Exiting.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    Application.Exit();
+                }
             }
             else
             {
@@ -165,7 +178,7 @@ namespace PullRequestExtractor
 
         private void ParsePullRequestData(PullRequest prs, bool isStartup)
         {
-            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();           
+            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
 
             foreach (var pr in prs.value)
             {
@@ -204,7 +217,7 @@ namespace PullRequestExtractor
 
             var dgvBindingSource = new BindingSource(dgvSource, null);
             dgvPRs.DataSource = dgvBindingSource;
-            
+
             dgvPRs.Refresh();
         }
 
@@ -227,6 +240,6 @@ namespace PullRequestExtractor
                 notifier.IsRightToLeft = false;
                 notifier.Popup();
             }
-        }       
+        }
     }
 }
