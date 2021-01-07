@@ -76,6 +76,11 @@ namespace PullRequestExtractor
             Application.Exit();
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            btnExit_Click(sender, e);
+        }
+
         private void dgvPRs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = dgvPRs.Rows[e.RowIndex];
@@ -212,6 +217,6 @@ namespace PullRequestExtractor
                 notifier.IsRightToLeft = false;
                 notifier.Popup();
             }
-        }
+        }       
     }
 }
