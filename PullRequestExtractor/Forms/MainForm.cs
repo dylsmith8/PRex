@@ -121,11 +121,19 @@ namespace PullRequestExtractor
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            if (this.WindowState == FormWindowState.Minimized)
+            if (WindowState == FormWindowState.Minimized)
             {
                 notifyIcon.Visible = true;
-                this.Hide();
+                Hide();
             }
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            Show();
+            notifyIcon.Visible = false;
+            TopMost = true;
+            WindowState = FormWindowState.Normal;
         }
 
         private async Task ListenForNewPullRequests(bool isStartup)
@@ -204,14 +212,6 @@ namespace PullRequestExtractor
                 notifier.IsRightToLeft = false;
                 notifier.Popup();
             }
-        }
-
-        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            this.Show();
-            notifyIcon.Visible = false;
-            TopMost = true;
-            this.WindowState = FormWindowState.Normal;
         }
     }
 }
