@@ -54,9 +54,7 @@ namespace PullRequestExtractor.Presenters
             if (!disposedValue)
             {
                 if (disposing && _mainForm != null)
-                {
                     _mainForm.Dispose();
-                }
                  
                 disposedValue = true;
             }

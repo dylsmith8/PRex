@@ -60,6 +60,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\AppSettings.cs" />
+    <Compile Include="Helpers\EventLogWriter.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IProject.cs" />
     <Compile Include="Interfaces\IPullRequest.cs" />

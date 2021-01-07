@@ -95,9 +95,19 @@ namespace PullRequestExtractor
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            Models.Projects.Project projects = await GetProjects?.Invoke();
+            Models.Projects.Project projects = null;
 
-            if (projects.value.Count > 0)
+            try
+            {
+                projects = await GetProjects?.Invoke();
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error); 
+                Application.Exit();
+            }
+
+            if (projects != null && projects.value.Count > 0)
             {
                 lblStatusText.Text = "Success";
                 lblStatusColour.BackColor = Color.LimeGreen;
