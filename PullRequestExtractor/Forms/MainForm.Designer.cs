@@ -46,6 +46,7 @@ namespace PullRequestExtractor
             this.grpPRs = new System.Windows.Forms.GroupBox();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.pButtons = new System.Windows.Forms.Panel();
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -202,6 +203,16 @@ namespace PullRequestExtractor
             this.pButtons.Size = new System.Drawing.Size(1194, 53);
             this.pButtons.TabIndex = 6;
             // 
+            // notifyIcon
+            // 
+            this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon.BalloonTipText = "Minimised";
+            this.notifyIcon.BalloonTipTitle = "PRex";
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "PRex";
+            this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -214,6 +225,7 @@ namespace PullRequestExtractor
             this.Name = "MainForm";
             this.Text = "PREx - An Azure DevOps Pull Request Parser";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.grpActiveSettings.ResumeLayout(false);
             this.grpActiveSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).EndInit();
@@ -241,6 +253,7 @@ namespace PullRequestExtractor
         private System.Windows.Forms.BindingSource bindingSource1;
         private System.Windows.Forms.Panel pButtons;
         private System.Windows.Forms.Label lblStatusText;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
     }
 }
 
