@@ -141,7 +141,7 @@ namespace PullRequestExtractor
                 {
                     Title = pr.title,
                     Repo = pr.repository.name,
-                    CreationDate = pr.creationDate,
+                    CreationDate = pr.creationDate.ToLocalTime(),
                     Author = pr.createdBy.displayName,
                     Status = pr.status,
                     Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
