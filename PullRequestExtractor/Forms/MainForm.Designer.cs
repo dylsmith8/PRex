@@ -32,7 +32,7 @@ namespace PullRequestExtractor
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnGetActivePRs = new System.Windows.Forms.Button();
             this.grpActiveSettings = new System.Windows.Forms.GroupBox();
             this.lblStatusText = new System.Windows.Forms.Label();
             this.lblStatusColour = new System.Windows.Forms.Label();
@@ -50,6 +50,8 @@ namespace PullRequestExtractor
             this.prexTablControl = new System.Windows.Forms.TabControl();
             this.tcActivePrs = new System.Windows.Forms.TabPage();
             this.tcPrArchive = new System.Windows.Forms.TabPage();
+            this.grpBoxArchived = new System.Windows.Forms.GroupBox();
+            this.dgvArchived = new System.Windows.Forms.DataGridView();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -57,11 +59,14 @@ namespace PullRequestExtractor
             this.pButtons.SuspendLayout();
             this.prexTablControl.SuspendLayout();
             this.tcActivePrs.SuspendLayout();
+            this.tcPrArchive.SuspendLayout();
+            this.grpBoxArchived.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvArchived)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(97, 16);
+            this.button1.Location = new System.Drawing.Point(114, 16);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -69,15 +74,15 @@ namespace PullRequestExtractor
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.TestGetProjects_Click);
             // 
-            // button2
+            // btnGetActivePRs
             // 
-            this.button2.Location = new System.Drawing.Point(16, 16);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Get PRs";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.TestGetPRs_Click);
+            this.btnGetActivePRs.Location = new System.Drawing.Point(16, 16);
+            this.btnGetActivePRs.Name = "btnGetActivePRs";
+            this.btnGetActivePRs.Size = new System.Drawing.Size(92, 23);
+            this.btnGetActivePRs.TabIndex = 1;
+            this.btnGetActivePRs.Text = "Get Active PRs";
+            this.btnGetActivePRs.UseVisualStyleBackColor = true;
+            this.btnGetActivePRs.Click += new System.EventHandler(this.TestGetPRs_Click);
             // 
             // grpActiveSettings
             // 
@@ -180,26 +185,24 @@ namespace PullRequestExtractor
             this.dgvPRs.Location = new System.Drawing.Point(3, 16);
             this.dgvPRs.Name = "dgvPRs";
             this.dgvPRs.ReadOnly = true;
-            this.dgvPRs.Size = new System.Drawing.Size(2174, 1117);
+            this.dgvPRs.Size = new System.Drawing.Size(1174, 598);
             this.dgvPRs.TabIndex = 4;
             this.dgvPRs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPRs_CellDoubleClick);
             // 
             // grpPRs
             // 
-            this.grpPRs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.grpPRs.Controls.Add(this.dgvPRs);
-            this.grpPRs.Location = new System.Drawing.Point(0, 0);
+            this.grpPRs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpPRs.Location = new System.Drawing.Point(3, 3);
             this.grpPRs.Name = "grpPRs";
-            this.grpPRs.Size = new System.Drawing.Size(2180, 1136);
+            this.grpPRs.Size = new System.Drawing.Size(1180, 617);
             this.grpPRs.TabIndex = 5;
             this.grpPRs.TabStop = false;
             this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
             // 
             // pButtons
             // 
-            this.pButtons.Controls.Add(this.button2);
+            this.pButtons.Controls.Add(this.btnGetActivePRs);
             this.pButtons.Controls.Add(this.button1);
             this.pButtons.Controls.Add(this.btnExit);
             this.pButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -242,13 +245,38 @@ namespace PullRequestExtractor
             // 
             // tcPrArchive
             // 
+            this.tcPrArchive.Controls.Add(this.grpBoxArchived);
             this.tcPrArchive.Location = new System.Drawing.Point(4, 22);
             this.tcPrArchive.Name = "tcPrArchive";
             this.tcPrArchive.Padding = new System.Windows.Forms.Padding(3);
-            this.tcPrArchive.Size = new System.Drawing.Size(192, 74);
+            this.tcPrArchive.Size = new System.Drawing.Size(1186, 623);
             this.tcPrArchive.TabIndex = 1;
             this.tcPrArchive.Text = "Archived";
             this.tcPrArchive.UseVisualStyleBackColor = true;
+            // 
+            // grpBoxArchived
+            // 
+            this.grpBoxArchived.Controls.Add(this.dgvArchived);
+            this.grpBoxArchived.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpBoxArchived.Location = new System.Drawing.Point(3, 3);
+            this.grpBoxArchived.Name = "grpBoxArchived";
+            this.grpBoxArchived.Size = new System.Drawing.Size(1180, 617);
+            this.grpBoxArchived.TabIndex = 6;
+            this.grpBoxArchived.TabStop = false;
+            this.grpBoxArchived.Text = "Archived PRs - Double click row to open in Azure DevOps";
+            // 
+            // dgvArchived
+            // 
+            this.dgvArchived.AllowUserToAddRows = false;
+            this.dgvArchived.AllowUserToDeleteRows = false;
+            this.dgvArchived.AllowUserToOrderColumns = true;
+            this.dgvArchived.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvArchived.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvArchived.Location = new System.Drawing.Point(3, 16);
+            this.dgvArchived.Name = "dgvArchived";
+            this.dgvArchived.ReadOnly = true;
+            this.dgvArchived.Size = new System.Drawing.Size(1174, 598);
+            this.dgvArchived.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -272,6 +300,9 @@ namespace PullRequestExtractor
             this.pButtons.ResumeLayout(false);
             this.prexTablControl.ResumeLayout(false);
             this.tcActivePrs.ResumeLayout(false);
+            this.tcPrArchive.ResumeLayout(false);
+            this.grpBoxArchived.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvArchived)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -279,7 +310,7 @@ namespace PullRequestExtractor
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnGetActivePRs;
         private System.Windows.Forms.GroupBox grpActiveSettings;
         private System.Windows.Forms.Label lblOrg;
         private System.Windows.Forms.Label lblProject;
@@ -297,6 +328,8 @@ namespace PullRequestExtractor
         private System.Windows.Forms.TabControl prexTablControl;
         private System.Windows.Forms.TabPage tcActivePrs;
         private System.Windows.Forms.TabPage tcPrArchive;
+        private System.Windows.Forms.GroupBox grpBoxArchived;
+        private System.Windows.Forms.DataGridView dgvArchived;
     }
 }
 
