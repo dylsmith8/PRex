@@ -14,7 +14,7 @@ using Tulpep.NotificationWindow;
 
 namespace PullRequestExtractor
 {
-    public partial class MainForm : Form, IProject, IPullRequest
+    public partial class MainForm : Form, IAzureDevOpAPI
     {
         private readonly string _project;
         private readonly string _org;
