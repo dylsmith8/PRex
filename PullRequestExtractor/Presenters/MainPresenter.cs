@@ -1,6 +1,4 @@
-﻿using PullRequestExtractor.Helpers;
-using PullRequestExtractor.Interfaces;
-using PullRequestExtractor.Managers;
+﻿using PullRequestExtractor.Interfaces;
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
@@ -12,12 +10,13 @@ namespace PullRequestExtractor.Presenters
     {
         private bool disposedValue;
         private MainForm _mainForm;
-        private IAppSettings _appSetttings;
 
-        public void Start()
+        private IAzureDevOps _azureDevOpsManager;
+
+        public void Start(IAzureDevOps azureDevOps)
         {
-            _appSetttings = new AppSettings();
-            _mainForm = new MainForm(_appSetttings);
+            _azureDevOpsManager = azureDevOps;
+            _mainForm = new MainForm(azureDevOps.Settings);
 
             DoPlumbing();
 
@@ -27,18 +26,24 @@ namespace PullRequestExtractor.Presenters
         private void DoPlumbing()
         {
             _mainForm.Closing += CloseApplication;
-            _mainForm.GetPullRequests += _mainForm_GetPullRequests;
+            _mainForm.GetActivePullRequests += _mainForm_GetActivePullRequests;
             _mainForm.GetProjects += _mainForm_GetProjects;
+            _mainForm.GetArchivedPullRequests += _mainForm_GetArchivedPullRequests;
         }
 
         private async Task<Models.Projects.Project> _mainForm_GetProjects()
         {
-            return await new ProjectManager(_appSetttings).GetAuthedProjectsAsync();
+            return await _azureDevOpsManager.GetAuthedProjectsAsync();
         }
 
-        private async Task<Models.PullRequests.PullRequest> _mainForm_GetPullRequests(string organisation, string project)
+        private async Task<Models.PullRequests.PullRequest> _mainForm_GetActivePullRequests(string organisation, string project)
         {
-            return await new PullRequestManager(_appSetttings).GetPullRequestsAsync(organisation, project);
+            return await _azureDevOpsManager.GetActivePullRequestsAsync(organisation, project);
+        }
+
+        private Task<Models.PullRequests.PullRequest> _mainForm_GetArchivedPullRequests()
+        {
+            throw new NotImplementedException();
         }
 
         private static void CloseApplication(object sender, CancelEventArgs e)

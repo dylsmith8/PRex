@@ -62,9 +62,9 @@
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\EventLogWriter.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
-    <Compile Include="Interfaces\IAzureDevOpAPI.cs" />
-    <Compile Include="Managers\ProjectManager.cs" />
-    <Compile Include="Managers\PullRequestManager.cs" />
+    <Compile Include="Interfaces\IAzureDevOps.cs" />
+    <Compile Include="Interfaces\IAzureDevOpsAPIEvents.cs" />
+    <Compile Include="Managers\AzureDevOpsAPIManager.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Models\PullRequestGridSource.cs" />

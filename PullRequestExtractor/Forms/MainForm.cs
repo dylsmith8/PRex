@@ -14,14 +14,15 @@ using Tulpep.NotificationWindow;
 
 namespace PullRequestExtractor
 {
-    public partial class MainForm : Form, IAzureDevOpAPI
+    public partial class MainForm : Form, IAzureDevOpsAPIEvents
     {
         private readonly string _project;
         private readonly string _org;
         private readonly int _pollingInterval;
 
         public event GetProjectsDelegate GetProjects;
-        public event GetPullRequestsDelegate GetPullRequests;
+        public event GetActivePullRequestsDelegate GetActivePullRequests;
+        public event GetArchivedPullRequestsDelegate GetArchivedPullRequests;
 
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -71,7 +72,7 @@ namespace PullRequestExtractor
         {
             try
             {
-                PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
+                PullRequest prs = await GetActivePullRequests?.Invoke(_org, _project);
                 ParsePullRequestData(prs, true);
             }
             catch (Exception ex)
@@ -171,7 +172,7 @@ namespace PullRequestExtractor
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                PullRequest prs = await GetPullRequests?.Invoke(_org, _project);
+                PullRequest prs = await GetActivePullRequests?.Invoke(_org, _project);
                 ParsePullRequestData(prs, isStartup);
                 isStartup = false;
 

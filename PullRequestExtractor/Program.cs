@@ -1,4 +1,7 @@
-﻿using PullRequestExtractor.Presenters;
+﻿using PullRequestExtractor.Helpers;
+using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Managers;
+using PullRequestExtractor.Presenters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +20,11 @@ namespace PullRequestExtractor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             using (MainPresenter presenter = new MainPresenter())
             {
-                presenter.Start();
+                IAzureDevOps azureDevOps = new AzureDevOpsAPIManager();
+                presenter.Start(azureDevOps);
                 Application.Run();
             }
         }
