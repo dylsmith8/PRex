@@ -47,11 +47,16 @@ namespace PullRequestExtractor
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.pButtons = new System.Windows.Forms.Panel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.prexTablControl = new System.Windows.Forms.TabControl();
+            this.tcActivePrs = new System.Windows.Forms.TabPage();
+            this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.pButtons.SuspendLayout();
+            this.prexTablControl.SuspendLayout();
+            this.tcActivePrs.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -175,7 +180,7 @@ namespace PullRequestExtractor
             this.dgvPRs.Location = new System.Drawing.Point(3, 16);
             this.dgvPRs.Name = "dgvPRs";
             this.dgvPRs.ReadOnly = true;
-            this.dgvPRs.Size = new System.Drawing.Size(1180, 568);
+            this.dgvPRs.Size = new System.Drawing.Size(2174, 1117);
             this.dgvPRs.TabIndex = 4;
             this.dgvPRs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPRs_CellDoubleClick);
             // 
@@ -185,9 +190,9 @@ namespace PullRequestExtractor
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpPRs.Controls.Add(this.dgvPRs);
-            this.grpPRs.Location = new System.Drawing.Point(0, 68);
+            this.grpPRs.Location = new System.Drawing.Point(0, 0);
             this.grpPRs.Name = "grpPRs";
-            this.grpPRs.Size = new System.Drawing.Size(1186, 587);
+            this.grpPRs.Size = new System.Drawing.Size(2180, 1136);
             this.grpPRs.TabIndex = 5;
             this.grpPRs.TabStop = false;
             this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
@@ -213,14 +218,46 @@ namespace PullRequestExtractor
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseDoubleClick);
             // 
+            // prexTablControl
+            // 
+            this.prexTablControl.Controls.Add(this.tcActivePrs);
+            this.prexTablControl.Controls.Add(this.tcPrArchive);
+            this.prexTablControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.prexTablControl.Location = new System.Drawing.Point(0, 65);
+            this.prexTablControl.Name = "prexTablControl";
+            this.prexTablControl.SelectedIndex = 0;
+            this.prexTablControl.Size = new System.Drawing.Size(1194, 649);
+            this.prexTablControl.TabIndex = 5;
+            // 
+            // tcActivePrs
+            // 
+            this.tcActivePrs.Controls.Add(this.grpPRs);
+            this.tcActivePrs.Location = new System.Drawing.Point(4, 22);
+            this.tcActivePrs.Name = "tcActivePrs";
+            this.tcActivePrs.Padding = new System.Windows.Forms.Padding(3);
+            this.tcActivePrs.Size = new System.Drawing.Size(1186, 623);
+            this.tcActivePrs.TabIndex = 0;
+            this.tcActivePrs.Text = "Active Pull Requests";
+            this.tcActivePrs.UseVisualStyleBackColor = true;
+            // 
+            // tcPrArchive
+            // 
+            this.tcPrArchive.Location = new System.Drawing.Point(4, 22);
+            this.tcPrArchive.Name = "tcPrArchive";
+            this.tcPrArchive.Padding = new System.Windows.Forms.Padding(3);
+            this.tcPrArchive.Size = new System.Drawing.Size(192, 74);
+            this.tcPrArchive.TabIndex = 1;
+            this.tcPrArchive.Text = "Archived";
+            this.tcPrArchive.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1194, 714);
-            this.Controls.Add(this.grpActiveSettings);
-            this.Controls.Add(this.grpPRs);
             this.Controls.Add(this.pButtons);
+            this.Controls.Add(this.prexTablControl);
+            this.Controls.Add(this.grpActiveSettings);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "PREx - An Azure DevOps Pull Request Parser";
@@ -233,6 +270,8 @@ namespace PullRequestExtractor
             this.grpPRs.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.pButtons.ResumeLayout(false);
+            this.prexTablControl.ResumeLayout(false);
+            this.tcActivePrs.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -255,6 +294,9 @@ namespace PullRequestExtractor
         private System.Windows.Forms.Panel pButtons;
         private System.Windows.Forms.Label lblStatusText;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.TabControl prexTablControl;
+        private System.Windows.Forms.TabPage tcActivePrs;
+        private System.Windows.Forms.TabPage tcPrArchive;
     }
 }
 
