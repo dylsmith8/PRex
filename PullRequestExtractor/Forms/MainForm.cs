@@ -49,6 +49,9 @@ namespace PullRequestExtractor
             lblOrgPlaceHolder.Text = _org;
             lblProjectPlaceHolder.Text = _project;
             _cancellationTokenSource = new CancellationTokenSource();
+
+            lblStatusText.Text = "Not authenticated";
+            lblStatusColour.BackColor = Color.Red;
         }
 
         private async void TestGetProjects_Click(object sender, EventArgs e)

@@ -94,7 +94,7 @@ namespace PullRequestExtractor
             // lblStatusText
             // 
             this.lblStatusText.AutoSize = true;
-            this.lblStatusText.Location = new System.Drawing.Point(661, 27);
+            this.lblStatusText.Location = new System.Drawing.Point(530, 28);
             this.lblStatusText.Name = "lblStatusText";
             this.lblStatusText.Size = new System.Drawing.Size(52, 13);
             this.lblStatusText.TabIndex = 9;
@@ -102,10 +102,9 @@ namespace PullRequestExtractor
             // 
             // lblStatusColour
             // 
-            this.lblStatusColour.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblStatusColour.BackColor = System.Drawing.Color.LimeGreen;
             this.lblStatusColour.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblStatusColour.Location = new System.Drawing.Point(641, 28);
+            this.lblStatusColour.Location = new System.Drawing.Point(510, 29);
             this.lblStatusColour.Name = "lblStatusColour";
             this.lblStatusColour.Size = new System.Drawing.Size(14, 13);
             this.lblStatusColour.TabIndex = 8;
@@ -113,7 +112,7 @@ namespace PullRequestExtractor
             // lblTokenAuthed
             // 
             this.lblTokenAuthed.AutoSize = true;
-            this.lblTokenAuthed.Location = new System.Drawing.Point(538, 28);
+            this.lblTokenAuthed.Location = new System.Drawing.Point(407, 29);
             this.lblTokenAuthed.Name = "lblTokenAuthed";
             this.lblTokenAuthed.Size = new System.Drawing.Size(93, 13);
             this.lblTokenAuthed.TabIndex = 4;
@@ -122,7 +121,7 @@ namespace PullRequestExtractor
             // lblProjectPlaceHolder
             // 
             this.lblProjectPlaceHolder.AutoSize = true;
-            this.lblProjectPlaceHolder.Location = new System.Drawing.Point(358, 28);
+            this.lblProjectPlaceHolder.Location = new System.Drawing.Point(281, 29);
             this.lblProjectPlaceHolder.Name = "lblProjectPlaceHolder";
             this.lblProjectPlaceHolder.Size = new System.Drawing.Size(39, 13);
             this.lblProjectPlaceHolder.TabIndex = 3;
@@ -140,7 +139,7 @@ namespace PullRequestExtractor
             // lblProject
             // 
             this.lblProject.AutoSize = true;
-            this.lblProject.Location = new System.Drawing.Point(292, 28);
+            this.lblProject.Location = new System.Drawing.Point(215, 29);
             this.lblProject.Name = "lblProject";
             this.lblProject.Size = new System.Drawing.Size(43, 13);
             this.lblProject.TabIndex = 1;
@@ -157,6 +156,7 @@ namespace PullRequestExtractor
             // 
             // btnExit
             // 
+            this.btnExit.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.btnExit.Location = new System.Drawing.Point(1108, 16);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(75, 23);
