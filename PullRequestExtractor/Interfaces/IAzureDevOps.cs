@@ -9,7 +9,7 @@ namespace PullRequestExtractor.Interfaces
         IAppSettings Settings { get; }
 
         Task<Project> GetAuthedProjectsAsync();
-        Task<PullRequest> GetActivePullRequestsAsync(string organisation, string project);
+        Task<PullRequest> GetActivePullRequestsAsync();
         Task<PullRequest> GetArchivedPullRequestsAsync();
     }
 }

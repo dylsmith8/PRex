@@ -36,9 +36,9 @@ namespace PullRequestExtractor.Presenters
             return await _azureDevOpsManager.GetAuthedProjectsAsync();
         }
 
-        private async Task<Models.PullRequests.PullRequest> _mainForm_GetActivePullRequests(string organisation, string project)
+        private async Task<Models.PullRequests.PullRequest> _mainForm_GetActivePullRequests()
         {
-            return await _azureDevOpsManager.GetActivePullRequestsAsync(organisation, project);
+            return await _azureDevOpsManager.GetActivePullRequestsAsync();
         }
 
         private Task<Models.PullRequests.PullRequest> _mainForm_GetArchivedPullRequests()

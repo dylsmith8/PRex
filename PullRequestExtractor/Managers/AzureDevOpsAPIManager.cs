@@ -15,20 +15,21 @@ namespace PullRequestExtractor.Managers
     {
         private readonly string _pat;
         private readonly string _org;
+        private readonly string _project;
 
         public IAppSettings Settings => new AppSettings();
 
         public AzureDevOpsAPIManager()
         {
-            var settings = Settings;
-
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings));
+            IAppSettings settings = Settings;
 
             if (!settings.TryGetAppSetting("PAT", out _pat))
                 throw new InvalidOperationException("Could not find a valid personal access token for Azure DevOps");
 
             if (!settings.TryGetAppSetting("Org", out _org))
+                throw new InvalidOperationException("Could not find an Organisation for Azure DevOps");
+
+            if (!settings.TryGetAppSetting("ActiveProject", out _project))
                 throw new InvalidOperationException("Could not find an Organisation for Azure DevOps");
         }
 
@@ -40,13 +41,8 @@ namespace PullRequestExtractor.Managers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Accept.Add(
-                        new MediaTypeWithQualityHeaderValue("application/json"));
-
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                        Convert.ToBase64String(
-                            System.Text.Encoding.ASCII.GetBytes(
-                                string.Format("{0}:{1}", "", _pat))));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = BuildAuthenticationHeader();
 
                     using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/{_org}/_apis/projects"))
                     {
@@ -71,7 +67,7 @@ namespace PullRequestExtractor.Managers
             }
         }
 
-        public async Task<PullRequest> GetActivePullRequestsAsync(string organisation, string project)
+        public async Task<PullRequest> GetActivePullRequestsAsync()
         {
             HttpStatusCode statusCode = new HttpStatusCode();
 
@@ -79,15 +75,10 @@ namespace PullRequestExtractor.Managers
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.Accept.Add(
-                        new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = BuildAuthenticationHeader();
 
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic",
-                        Convert.ToBase64String(
-                            System.Text.Encoding.ASCII.GetBytes(
-                                string.Format("{0}:{1}", string.Empty, _pat))));
-
-                    using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/{organisation}/{project}/_apis/git/pullrequests?api-version=6.0"))
+                    using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/{_org}/{_project}/_apis/git/pullrequests?api-version=6.0"))
                     {
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();
@@ -112,6 +103,16 @@ namespace PullRequestExtractor.Managers
         public async Task<PullRequest> GetArchivedPullRequestsAsync()
         {
             throw new NotImplementedException();
+        }
+
+        private AuthenticationHeaderValue BuildAuthenticationHeader()
+        {
+            return new AuthenticationHeaderValue("Basic",
+                Convert.ToBase64String(
+                    System.Text.Encoding.ASCII.GetBytes(
+                        string.Format("{0}:{1}", string.Empty, _pat))
+                    )
+                );
         }
     }
 }

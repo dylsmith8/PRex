@@ -72,7 +72,7 @@ namespace PullRequestExtractor
         {
             try
             {
-                PullRequest prs = await GetActivePullRequests?.Invoke(_org, _project);
+                PullRequest prs = await GetActivePullRequests?.Invoke();
                 ParsePullRequestData(prs, true);
             }
             catch (Exception ex)
@@ -172,7 +172,7 @@ namespace PullRequestExtractor
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
-                PullRequest prs = await GetActivePullRequests?.Invoke(_org, _project);
+                PullRequest prs = await GetActivePullRequests?.Invoke();
                 ParsePullRequestData(prs, isStartup);
                 isStartup = false;
 
