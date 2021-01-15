@@ -190,7 +190,7 @@ namespace PullRequestExtractor
             this.dgvPRs.Location = new System.Drawing.Point(3, 16);
             this.dgvPRs.Name = "dgvPRs";
             this.dgvPRs.ReadOnly = true;
-            this.dgvPRs.Size = new System.Drawing.Size(1174, 598);
+            this.dgvPRs.Size = new System.Drawing.Size(1174, 546);
             this.dgvPRs.TabIndex = 4;
             this.dgvPRs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPRs_CellDoubleClick);
             // 
@@ -200,7 +200,7 @@ namespace PullRequestExtractor
             this.grpPRs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpPRs.Location = new System.Drawing.Point(3, 3);
             this.grpPRs.Name = "grpPRs";
-            this.grpPRs.Size = new System.Drawing.Size(1180, 617);
+            this.grpPRs.Size = new System.Drawing.Size(1180, 565);
             this.grpPRs.TabIndex = 5;
             this.grpPRs.TabStop = false;
             this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
@@ -245,7 +245,7 @@ namespace PullRequestExtractor
             this.tcActivePrs.Location = new System.Drawing.Point(4, 22);
             this.tcActivePrs.Name = "tcActivePrs";
             this.tcActivePrs.Padding = new System.Windows.Forms.Padding(3);
-            this.tcActivePrs.Size = new System.Drawing.Size(1186, 623);
+            this.tcActivePrs.Size = new System.Drawing.Size(1186, 571);
             this.tcActivePrs.TabIndex = 0;
             this.tcActivePrs.Text = "Active Pull Requests";
             this.tcActivePrs.UseVisualStyleBackColor = true;

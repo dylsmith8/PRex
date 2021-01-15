@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PullRequestExtractor.Models
+﻿namespace PullRequestExtractor.Models
 {
     public class CompletedGridSource : PullRequestGridSource
     {
