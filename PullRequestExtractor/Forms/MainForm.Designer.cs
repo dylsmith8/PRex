@@ -52,10 +52,10 @@ namespace PullRequestExtractor
             this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.grpBoxArchived = new System.Windows.Forms.GroupBox();
             this.panelFilter = new System.Windows.Forms.Panel();
+            this.btnArchPrs = new System.Windows.Forms.Button();
             this.txtBoxFilter = new System.Windows.Forms.TextBox();
             this.lblFilter = new System.Windows.Forms.Label();
             this.dgvArchived = new System.Windows.Forms.DataGridView();
-            this.btnArchPrs = new System.Windows.Forms.Button();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -284,6 +284,16 @@ namespace PullRequestExtractor
             this.panelFilter.Size = new System.Drawing.Size(1174, 34);
             this.panelFilter.TabIndex = 6;
             // 
+            // btnArchPrs
+            // 
+            this.btnArchPrs.Location = new System.Drawing.Point(877, 5);
+            this.btnArchPrs.Name = "btnArchPrs";
+            this.btnArchPrs.Size = new System.Drawing.Size(66, 23);
+            this.btnArchPrs.TabIndex = 5;
+            this.btnArchPrs.Text = "Refresh";
+            this.btnArchPrs.UseVisualStyleBackColor = true;
+            this.btnArchPrs.Click += new System.EventHandler(this.btnArchPrs_Click);
+            // 
             // txtBoxFilter
             // 
             this.txtBoxFilter.Location = new System.Drawing.Point(49, 7);
@@ -315,15 +325,6 @@ namespace PullRequestExtractor
             this.dgvArchived.ReadOnly = true;
             this.dgvArchived.Size = new System.Drawing.Size(1174, 509);
             this.dgvArchived.TabIndex = 4;
-            // 
-            // btnArchPrs
-            // 
-            this.btnArchPrs.Location = new System.Drawing.Point(877, 5);
-            this.btnArchPrs.Name = "btnArchPrs";
-            this.btnArchPrs.Size = new System.Drawing.Size(66, 23);
-            this.btnArchPrs.TabIndex = 5;
-            this.btnArchPrs.Text = "Refresh";
-            this.btnArchPrs.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 

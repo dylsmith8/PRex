@@ -172,6 +172,7 @@ namespace PullRequestExtractor
             TopMost = true;
             WindowState = FormWindowState.Normal;
         }
+
         private async void btnArchPrs_Click(object sender, EventArgs e)
         {
             PullRequest prs = await GetArchivedPullRequests?.Invoke();
