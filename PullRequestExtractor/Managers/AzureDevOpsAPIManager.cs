@@ -11,6 +11,7 @@ using Project = PullRequestExtractor.Models.Projects.Project;
 
 namespace PullRequestExtractor.Managers
 {
+    // TODO: make an Executor class to wrap the exception handling.. lots of repeated code here
     public class AzureDevOpsAPIManager : IAzureDevOps
     {
         private readonly string _pat;
@@ -102,7 +103,35 @@ namespace PullRequestExtractor.Managers
 
         public async Task<PullRequest> GetArchivedPullRequestsAsync()
         {
-            throw new NotImplementedException();
+            HttpStatusCode statusCode = new HttpStatusCode();
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = BuildAuthenticationHeader();
+
+                    using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/{_org}/{_project}/_apis/git/pullrequests?searchCriteria.status=completed&api-version=6.0"))
+                    {
+                        response.EnsureSuccessStatusCode();
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<PullRequest>(responseBody);
+                    }
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                int code = (int)statusCode;
+
+                string error = code != 0 ?
+                    $"Could not connect to the Azure DevOps API. HTTP Response {(int)statusCode} ({statusCode})" :
+                    $"Could not connect to the Azure DevOps API.";
+
+                EventLogWriter.WriteToEventLog(e, error);
+
+                throw new Exception(error, e);
+            }
         }
 
         private AuthenticationHeaderValue BuildAuthenticationHeader()

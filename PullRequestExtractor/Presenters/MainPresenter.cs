@@ -41,9 +41,9 @@ namespace PullRequestExtractor.Presenters
             return await _azureDevOpsManager.GetActivePullRequestsAsync();
         }
 
-        private Task<Models.PullRequests.PullRequest> _mainForm_GetArchivedPullRequests()
+        private async Task<Models.PullRequests.PullRequest> _mainForm_GetArchivedPullRequests()
         {
-            throw new NotImplementedException();
+            return await _azureDevOpsManager.GetArchivedPullRequestsAsync();
         }
 
         private static void CloseApplication(object sender, CancelEventArgs e)

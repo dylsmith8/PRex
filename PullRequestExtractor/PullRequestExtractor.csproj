@@ -65,6 +65,7 @@
     <Compile Include="Interfaces\IAzureDevOps.cs" />
     <Compile Include="Interfaces\IAzureDevOpsAPIEvents.cs" />
     <Compile Include="Managers\AzureDevOpsAPIManager.cs" />
+    <Compile Include="Models\CompletedGridSource.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Models\PullRequestGridSource.cs" />

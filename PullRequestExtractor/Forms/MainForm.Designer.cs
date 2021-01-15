@@ -52,6 +52,7 @@ namespace PullRequestExtractor
             this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.grpBoxArchived = new System.Windows.Forms.GroupBox();
             this.dgvArchived = new System.Windows.Forms.DataGridView();
+            this.btnArchPrs = new System.Windows.Forms.Button();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
@@ -202,6 +203,7 @@ namespace PullRequestExtractor
             // 
             // pButtons
             // 
+            this.pButtons.Controls.Add(this.btnArchPrs);
             this.pButtons.Controls.Add(this.btnGetActivePRs);
             this.pButtons.Controls.Add(this.button1);
             this.pButtons.Controls.Add(this.btnExit);
@@ -278,6 +280,16 @@ namespace PullRequestExtractor
             this.dgvArchived.Size = new System.Drawing.Size(1174, 598);
             this.dgvArchived.TabIndex = 4;
             // 
+            // btnArchPrs
+            // 
+            this.btnArchPrs.Location = new System.Drawing.Point(195, 16);
+            this.btnArchPrs.Name = "btnArchPrs";
+            this.btnArchPrs.Size = new System.Drawing.Size(125, 23);
+            this.btnArchPrs.TabIndex = 4;
+            this.btnArchPrs.Text = "Get Archived PRs";
+            this.btnArchPrs.UseVisualStyleBackColor = true;
+            this.btnArchPrs.Click += new System.EventHandler(this.btnArchPrs_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -330,6 +342,7 @@ namespace PullRequestExtractor
         private System.Windows.Forms.TabPage tcPrArchive;
         private System.Windows.Forms.GroupBox grpBoxArchived;
         private System.Windows.Forms.DataGridView dgvArchived;
+        private System.Windows.Forms.Button btnArchPrs;
     }
 }
 

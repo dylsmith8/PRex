@@ -73,7 +73,7 @@ namespace PullRequestExtractor
             try
             {
                 PullRequest prs = await GetActivePullRequests?.Invoke();
-                ParsePullRequestData(prs, true);
+                ParseActivePullRequestData(prs, true);
             }
             catch (Exception ex)
             {
@@ -167,27 +167,33 @@ namespace PullRequestExtractor
             TopMost = true;
             WindowState = FormWindowState.Normal;
         }
+        private async void btnArchPrs_Click(object sender, EventArgs e)
+        {
+            PullRequest prs = await GetArchivedPullRequests?.Invoke();
+            ParseArchivedPullRequests(prs);
+        }
 
         private async Task ListenForNewPullRequests(bool isStartup)
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
             {
                 PullRequest prs = await GetActivePullRequests?.Invoke();
-                ParsePullRequestData(prs, isStartup);
+                ParseActivePullRequestData(prs, isStartup);
                 isStartup = false;
 
                 await Task.Delay(_pollingInterval, _cancellationTokenSource.Token);
             }
         }
 
-        private void ParsePullRequestData(PullRequest prs, bool isStartup)
+        private void ParseArchivedPullRequests(PullRequest prs)
         {
-            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
+            List<CompletedGridSource> dgvSource = new List<CompletedGridSource>();
 
             foreach (var pr in prs.value)
             {
-                var src = new PullRequestGridSource
+                var src = new CompletedGridSource
                 {
+                    CodeReviewId = pr.codeReviewId,
                     Title = pr.title,
                     Repo = pr.repository.name,
                     CreationDate = pr.creationDate.ToLocalTime(),
@@ -196,7 +202,43 @@ namespace PullRequestExtractor
                     Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
                     SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
                     TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
-                    CodeReviewId = pr.codeReviewId
+                    
+                    MergeStatus = pr.mergeStatus,
+                    ClosedDate = pr.closedDate
+                };
+
+                dgvSource.Add(src);
+            }
+
+            dgvSource.OrderByDescending(x => x.CreationDate);
+
+            dgvArchived.DataSource = null;
+            dgvArchived.AutoGenerateColumns = true;
+            dgvArchived.Refresh();
+
+            var dgvBindingSource = new BindingSource(dgvSource, null);
+            dgvArchived.DataSource = dgvBindingSource;
+
+            dgvArchived.Refresh();
+        } 
+
+        private void ParseActivePullRequestData(PullRequest prs, bool isStartup)
+        {
+            List<PullRequestGridSource> dgvSource = new List<PullRequestGridSource>();
+
+            foreach (var pr in prs.value)
+            {
+                var src = new PullRequestGridSource
+                {
+                    CodeReviewId = pr.codeReviewId,
+                    Title = pr.title,
+                    Repo = pr.repository.name,
+                    CreationDate = pr.creationDate.ToLocalTime(),
+                    Author = pr.createdBy.displayName,
+                    Status = pr.status,
+                    Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
+                    SourceBranch = pr.sourceRefName.Substring(pr.sourceRefName.LastIndexOf(@"/")),
+                    TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
                 };
 
                 dgvSource.Add(src);

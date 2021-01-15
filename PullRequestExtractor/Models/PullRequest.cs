@@ -65,6 +65,7 @@ namespace PullRequestExtractor.Models.PullRequests
         public string status { get; set; }
         public CreatedBy createdBy { get; set; }
         public DateTime creationDate { get; set; }
+        public DateTime closedDate { get; set; }
         public string title { get; set; }
         public string description { get; set; }
         public string sourceRefName { get; set; }
