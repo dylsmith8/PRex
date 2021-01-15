@@ -61,6 +61,7 @@
     </Compile>
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\EventLogWriter.cs" />
+    <Compile Include="Helpers\Util.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IAzureDevOps.cs" />
     <Compile Include="Interfaces\IAzureDevOpsAPIEvents.cs" />

@@ -10,13 +10,13 @@ namespace PullRequestExtractor.Models
 
         public string Title { get; set; }
         public string Repo { get; set; }
-        public DateTime CreationDate { get; set; }
+        public string CreationDate { get; set; }
         public string Author { get; set; }
         public string Status { get; set; }
         public string Reviewers { get; set; }
         public string SourceBranch { get; set; }
         public string TargetBranch { get; set; }
-        public int CodeReviewId { get; set; }
+        public string CodeReviewId { get; set; }
     }
 
     public class PullRequestComparer : IEqualityComparer<PullRequestGridSource>
@@ -27,7 +27,7 @@ namespace PullRequestExtractor.Models
                 return true;
             else if (x == null || y == null)
                 return false;
-            else if (x.CodeReviewId == y.CodeReviewId)
+            else if (x.CodeReviewId.Equals(y.CodeReviewId))
                 return true;
             else
                 return false;

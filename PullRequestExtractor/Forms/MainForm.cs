@@ -1,8 +1,10 @@
-﻿using PullRequestExtractor.Interfaces;
+﻿using PullRequestExtractor.Helpers;
+using PullRequestExtractor.Interfaces;
 using PullRequestExtractor.Models;
 using PullRequestExtractor.Models.PullRequests;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -53,6 +55,9 @@ namespace PullRequestExtractor
 
             lblStatusText.Text = "Not authenticated";
             lblStatusColour.BackColor = Color.Red;
+
+            
+            dgvArchived.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private async void TestGetProjects_Click(object sender, EventArgs e)
@@ -193,10 +198,10 @@ namespace PullRequestExtractor
             {
                 var src = new CompletedGridSource
                 {
-                    CodeReviewId = pr.codeReviewId,
+                    CodeReviewId = pr.codeReviewId.ToString(),
                     Title = pr.title,
                     Repo = pr.repository.name,
-                    CreationDate = pr.creationDate.ToLocalTime(),
+                    CreationDate = pr.creationDate.ToLocalTime().ToShortDateString(),
                     Author = pr.createdBy.displayName,
                     Status = pr.status,
                     Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
@@ -204,21 +209,20 @@ namespace PullRequestExtractor
                     TargetBranch = pr.targetRefName.Substring(pr.targetRefName.LastIndexOf(@"/")),
                     
                     MergeStatus = pr.mergeStatus,
-                    ClosedDate = pr.closedDate
+                    ClosedDate = pr.closedDate.ToLocalTime().ToShortDateString()
                 };
 
                 dgvSource.Add(src);
-            }
+            }           
 
             dgvSource.OrderByDescending(x => x.CreationDate);
+            DataTable dt = Util.ToDataTable(dgvSource);
 
             dgvArchived.DataSource = null;
             dgvArchived.AutoGenerateColumns = true;
             dgvArchived.Refresh();
 
-            var dgvBindingSource = new BindingSource(dgvSource, null);
-            dgvArchived.DataSource = dgvBindingSource;
-
+            dgvArchived.DataSource = dt;
             dgvArchived.Refresh();
         } 
 
@@ -230,10 +234,10 @@ namespace PullRequestExtractor
             {
                 var src = new PullRequestGridSource
                 {
-                    CodeReviewId = pr.codeReviewId,
+                    CodeReviewId = pr.codeReviewId.ToString(),
                     Title = pr.title,
                     Repo = pr.repository.name,
-                    CreationDate = pr.creationDate.ToLocalTime(),
+                    CreationDate = pr.creationDate.ToLocalTime().ToString(),
                     Author = pr.createdBy.displayName,
                     Status = pr.status,
                     Reviewers = string.Join(", ", pr.reviewers.Select(x => x.displayName)),
@@ -263,7 +267,6 @@ namespace PullRequestExtractor
 
             var dgvBindingSource = new BindingSource(dgvSource, null);
             dgvPRs.DataSource = dgvBindingSource;
-
             dgvPRs.Refresh();
         }
 
@@ -285,6 +288,21 @@ namespace PullRequestExtractor
                 notifier.ContentText = content;
                 notifier.IsRightToLeft = false;
                 notifier.Popup();
+            }
+        }
+
+        private void txtBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+            string query = txtBoxFilter.Text;
+            List<string> queries = new List<string>();            
+            
+            foreach (DataGridViewTextBoxColumn col in dgvArchived.Columns)
+                queries.Add($"{col.Name} LIKE '%{query}%'");
+
+            if (queries.Any())
+            {
+                var queryFilter = string.Join(" OR ", queries);
+                ((DataTable)dgvArchived.DataSource).DefaultView.RowFilter = queryFilter;
             }
         }
     }
