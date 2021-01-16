@@ -100,14 +100,12 @@ namespace PullRequestExtractor
 
         private void dgvPRs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            DataGridViewRow row = dgvPRs.Rows[e.RowIndex];
-            string repo = row.Cells["Repo"]?.Value.ToString();
-            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
+            OpenPullRequestInBrowser(e, dgvPRs);
+        }
 
-            string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
-
-            Debug.WriteLine(uri);
-            Process.Start(uri);
+        private void dgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            OpenPullRequestInBrowser(e, dgvArchived);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -175,8 +173,31 @@ namespace PullRequestExtractor
 
         private async void btnArchPrs_Click(object sender, EventArgs e)
         {
-            PullRequest prs = await GetArchivedPullRequests?.Invoke();
-            ParseArchivedPullRequests(prs);
+            try
+            {
+                PullRequest prs = await GetArchivedPullRequests?.Invoke();
+                ParseArchivedPullRequests(prs);
+            }
+            catch (TaskCanceledException) { MessageBox.Show("Cannot retrieve archived PRs.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\n. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
+        }
+
+        private void txtBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+            string query = txtBoxFilter.Text;
+            List<string> queries = new List<string>();
+
+            foreach (DataGridViewTextBoxColumn col in dgvArchived.Columns)
+                queries.Add($"{col.Name} LIKE '%{query}%'");
+
+            if (queries.Any())
+            {
+                var queryFilter = string.Join(" OR ", queries);
+                ((DataTable)dgvArchived.DataSource).DefaultView.RowFilter = queryFilter;
+            }
         }
 
         private async Task ListenForNewPullRequests(bool isStartup)
@@ -278,7 +299,7 @@ namespace PullRequestExtractor
 
         private static void CreateToast(string pullRequestName, string author)
         {
-            DisplayToast("A new pull request has been added", $"A new pull request with title {pullRequestName} has been added by {author}.");
+            DisplayToast("A new pull request has been added", $"A new pull request with title '{pullRequestName}' has been added by {author}.");
         }
 
         private static void DisplayToast(string title, string content)
@@ -292,19 +313,16 @@ namespace PullRequestExtractor
             }
         }
 
-        private void txtBoxFilter_TextChanged(object sender, EventArgs e)
+        private void OpenPullRequestInBrowser(DataGridViewCellEventArgs e, DataGridView dgv)
         {
-            string query = txtBoxFilter.Text;
-            List<string> queries = new List<string>();            
-            
-            foreach (DataGridViewTextBoxColumn col in dgvArchived.Columns)
-                queries.Add($"{col.Name} LIKE '%{query}%'");
+            DataGridViewRow row = dgv.Rows[e.RowIndex];
+            string repo = row.Cells["Repo"]?.Value.ToString();
+            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
 
-            if (queries.Any())
-            {
-                var queryFilter = string.Join(" OR ", queries);
-                ((DataTable)dgvArchived.DataSource).DefaultView.RowFilter = queryFilter;
-            }
+            string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
+
+            Debug.WriteLine(uri);
+            Process.Start(uri); // will start the default browser
         }
     }
 }

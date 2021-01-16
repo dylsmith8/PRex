@@ -325,6 +325,7 @@ namespace PullRequestExtractor
             this.dgvArchived.ReadOnly = true;
             this.dgvArchived.Size = new System.Drawing.Size(1174, 509);
             this.dgvArchived.TabIndex = 4;
+            this.dgvArchived.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvArchived_CellDoubleClick);
             // 
             // MainForm
             // 

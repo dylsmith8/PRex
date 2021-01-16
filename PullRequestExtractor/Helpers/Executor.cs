@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace PullRequestExtractor.Helpers
 {
-    public static class Executor<T>
+    internal static class Executor<T>
     {
-        public static async Task<T> TryExecute(Func<Task<T>> func, string error)
+        internal static async Task<T> TryExecute(Func<Task<T>> func, string error)
         {
             try
             {
