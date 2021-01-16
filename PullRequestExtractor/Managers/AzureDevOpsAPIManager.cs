@@ -11,7 +11,6 @@ using Project = PullRequestExtractor.Models.Projects.Project;
 
 namespace PullRequestExtractor.Managers
 {
-    // TODO: make an Executor class to wrap the exception handling.. lots of repeated code here
     public class AzureDevOpsAPIManager : IAzureDevOps
     {
         private readonly string _pat;
@@ -38,7 +37,7 @@ namespace PullRequestExtractor.Managers
         {
             HttpStatusCode statusCode = new HttpStatusCode();
 
-            try
+            return await Executor<Project>.TryExecute(async delegate
             {
                 using (HttpClient client = new HttpClient())
                 {
@@ -53,26 +52,14 @@ namespace PullRequestExtractor.Managers
                         return JsonConvert.DeserializeObject<Project>(responseBody);
                     }
                 }
-            }
-            catch (HttpRequestException e)
-            {
-                int code = (int)statusCode;
-
-                string error = code != 0 ?
-                    $"Could not connect to the Azure DevOps API. HTTP Response {(int)statusCode} ({statusCode})" :
-                    $"Could not connect to the Azure DevOps API.";
-
-                EventLogWriter.WriteToEventLog(e, error);
-
-                throw new Exception(error, e);
-            }
+            }, $"Could not connect to the Azure DevOps API. Status Code {(int)statusCode}");
         }
 
         public async Task<PullRequest> GetActivePullRequestsAsync()
         {
             HttpStatusCode statusCode = new HttpStatusCode();
 
-            try
+            return await Executor<PullRequest>.TryExecute(async delegate
             {
                 using (HttpClient client = new HttpClient())
                 {
@@ -86,26 +73,14 @@ namespace PullRequestExtractor.Managers
                         return JsonConvert.DeserializeObject<PullRequest>(responseBody);
                     }
                 }
-            }
-            catch (HttpRequestException e)
-            {
-                int code = (int)statusCode;
-
-                string error = code != 0 ?
-                    $"Could not connect to the Azure DevOps API. HTTP Response {(int)statusCode} ({statusCode})" :
-                    $"Could not connect to the Azure DevOps API.";
-
-                EventLogWriter.WriteToEventLog(e, error);
-
-                throw new Exception(error, e);
-            }
+            }, $"Could not connect to the Azure DevOps API. Status Code {(int)statusCode}");
         }
 
         public async Task<PullRequest> GetArchivedPullRequestsAsync()
         {
             HttpStatusCode statusCode = new HttpStatusCode();
 
-            try
+            return await Executor<PullRequest>.TryExecute(async delegate
             {
                 using (HttpClient client = new HttpClient())
                 {
@@ -119,19 +94,7 @@ namespace PullRequestExtractor.Managers
                         return JsonConvert.DeserializeObject<PullRequest>(responseBody);
                     }
                 }
-            }
-            catch (HttpRequestException e)
-            {
-                int code = (int)statusCode;
-
-                string error = code != 0 ?
-                    $"Could not connect to the Azure DevOps API. HTTP Response {(int)statusCode} ({statusCode})" :
-                    $"Could not connect to the Azure DevOps API.";
-
-                EventLogWriter.WriteToEventLog(e, error);
-
-                throw new Exception(error, e);
-            }
+            }, $"Could not connect to the Azure DevOps API. Status Code {(int)statusCode}");
         }
 
         private AuthenticationHeaderValue BuildAuthenticationHeader()
