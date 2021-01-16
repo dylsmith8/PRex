@@ -245,7 +245,7 @@ namespace PullRequestExtractor
             this.tcPrArchive.Location = new System.Drawing.Point(4, 22);
             this.tcPrArchive.Name = "tcPrArchive";
             this.tcPrArchive.Padding = new System.Windows.Forms.Padding(3);
-            this.tcPrArchive.Size = new System.Drawing.Size(1186, 571);
+            this.tcPrArchive.Size = new System.Drawing.Size(1186, 542);
             this.tcPrArchive.TabIndex = 1;
             this.tcPrArchive.Text = "Archived";
             this.tcPrArchive.UseVisualStyleBackColor = true;
@@ -257,7 +257,7 @@ namespace PullRequestExtractor
             this.grpBoxArchived.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpBoxArchived.Location = new System.Drawing.Point(3, 3);
             this.grpBoxArchived.Name = "grpBoxArchived";
-            this.grpBoxArchived.Size = new System.Drawing.Size(1180, 565);
+            this.grpBoxArchived.Size = new System.Drawing.Size(1180, 536);
             this.grpBoxArchived.TabIndex = 6;
             this.grpBoxArchived.TabStop = false;
             this.grpBoxArchived.Text = "Archived PRs - Double click row to open in Azure DevOps";
@@ -312,7 +312,7 @@ namespace PullRequestExtractor
             this.dgvArchived.Location = new System.Drawing.Point(3, 56);
             this.dgvArchived.Name = "dgvArchived";
             this.dgvArchived.ReadOnly = true;
-            this.dgvArchived.Size = new System.Drawing.Size(1174, 509);
+            this.dgvArchived.Size = new System.Drawing.Size(1174, 480);
             this.dgvArchived.TabIndex = 4;
             this.dgvArchived.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvArchived_CellDoubleClick);
             // 
