@@ -55,9 +55,6 @@ namespace PullRequestExtractor
 
             lblStatusText.Text = "Not authenticated";
             lblStatusColour.BackColor = Color.Red;
-
-            
-            dgvArchived.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells);
         }
 
         private async void TestGetProjects_Click(object sender, EventArgs e)
@@ -105,7 +102,7 @@ namespace PullRequestExtractor
 
         private void dgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            OpenPullRequestInBrowser(e, dgvArchived);
+            OpenPullRequestInBrowser(e, adgvArchived);
         }
 
         private async void MainForm_Load(object sender, EventArgs e)
@@ -185,21 +182,6 @@ namespace PullRequestExtractor
             };
         }
 
-        private void txtBoxFilter_TextChanged(object sender, EventArgs e)
-        {
-            string query = txtBoxFilter.Text;
-            List<string> queries = new List<string>();
-
-            foreach (DataGridViewTextBoxColumn col in dgvArchived.Columns)
-                queries.Add($"{col.Name} LIKE '%{query}%'");
-
-            if (queries.Any())
-            {
-                var queryFilter = string.Join(" OR ", queries);
-                ((DataTable)dgvArchived.DataSource).DefaultView.RowFilter = queryFilter;
-            }
-        }
-
         private async Task ListenForNewPullRequests(bool isStartup)
         {
             while (!_cancellationTokenSource.IsCancellationRequested)
@@ -233,20 +215,31 @@ namespace PullRequestExtractor
                     MergeStatus = pr.mergeStatus,
                     ClosedDate = pr.closedDate.ToLocalTime().ToShortDateString()
                 };
+                
 
                 dgvSource.Add(src);
             }           
 
             dgvSource.OrderByDescending(x => x.CreationDate);
             DataTable dt = Util.ToDataTable(dgvSource);
+            
+            adgvArchived.DataSource = null;
+            adgvArchived.AutoGenerateColumns = true;
+            adgvArchived.Refresh();
 
-            dgvArchived.DataSource = null;
-            dgvArchived.AutoGenerateColumns = true;
-            dgvArchived.Refresh();
+            adgvArchived.DataSource = dt;
+            adgvArchived.Refresh();
+        }
 
-            dgvArchived.DataSource = dt;
-            dgvArchived.Refresh();
-        } 
+        private void adgvArchived_FilterStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.FilterEventArgs e)
+        {
+            ((DataTable)adgvArchived.DataSource).DefaultView.RowFilter = adgvArchived.FilterString;
+        }
+
+        private void adgvArchived_SortStringChanged(object sender, Zuby.ADGV.AdvancedDataGridView.SortEventArgs e)
+        {
+            ((DataTable)adgvArchived.DataSource).DefaultView.Sort = adgvArchived.SortString;
+        }
 
         private void ParseActivePullRequestData(PullRequest prs, bool isStartup)
         {

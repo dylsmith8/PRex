@@ -43,6 +43,8 @@ namespace PullRequestExtractor
             this.btnExit = new System.Windows.Forms.Button();
             this.dgvPRs = new System.Windows.Forms.DataGridView();
             this.grpPRs = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.btnGetActivePRs = new System.Windows.Forms.Button();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.pButtons = new System.Windows.Forms.Panel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -50,25 +52,21 @@ namespace PullRequestExtractor
             this.tcActivePrs = new System.Windows.Forms.TabPage();
             this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.grpBoxArchived = new System.Windows.Forms.GroupBox();
+            this.adgvArchived = new Zuby.ADGV.AdvancedDataGridView();
             this.panelFilter = new System.Windows.Forms.Panel();
             this.btnArchPrs = new System.Windows.Forms.Button();
-            this.txtBoxFilter = new System.Windows.Forms.TextBox();
-            this.lblFilter = new System.Windows.Forms.Label();
-            this.dgvArchived = new System.Windows.Forms.DataGridView();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.btnGetActivePRs = new System.Windows.Forms.Button();
             this.grpActiveSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).BeginInit();
             this.grpPRs.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.pButtons.SuspendLayout();
             this.prexTablControl.SuspendLayout();
             this.tcActivePrs.SuspendLayout();
             this.tcPrArchive.SuspendLayout();
             this.grpBoxArchived.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.adgvArchived)).BeginInit();
             this.panelFilter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArchived)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -198,6 +196,24 @@ namespace PullRequestExtractor
             this.grpPRs.TabStop = false;
             this.grpPRs.Text = "Active PRs - Double click row to open in Azure DevOps";
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnGetActivePRs);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(3, 16);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1174, 34);
+            this.panel1.TabIndex = 7;
+            // 
+            // btnGetActivePRs
+            // 
+            this.btnGetActivePRs.Location = new System.Drawing.Point(6, 7);
+            this.btnGetActivePRs.Name = "btnGetActivePRs";
+            this.btnGetActivePRs.Size = new System.Drawing.Size(67, 23);
+            this.btnGetActivePRs.TabIndex = 2;
+            this.btnGetActivePRs.Text = "Refresh";
+            this.btnGetActivePRs.UseVisualStyleBackColor = true;
+            // 
             // pButtons
             // 
             this.pButtons.Controls.Add(this.btnExit);
@@ -252,8 +268,8 @@ namespace PullRequestExtractor
             // 
             // grpBoxArchived
             // 
+            this.grpBoxArchived.Controls.Add(this.adgvArchived);
             this.grpBoxArchived.Controls.Add(this.panelFilter);
-            this.grpBoxArchived.Controls.Add(this.dgvArchived);
             this.grpBoxArchived.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpBoxArchived.Location = new System.Drawing.Point(3, 3);
             this.grpBoxArchived.Name = "grpBoxArchived";
@@ -262,11 +278,26 @@ namespace PullRequestExtractor
             this.grpBoxArchived.TabStop = false;
             this.grpBoxArchived.Text = "Archived PRs - Double click row to open in Azure DevOps";
             // 
+            // adgvArchived
+            // 
+            this.adgvArchived.AllowUserToAddRows = false;
+            this.adgvArchived.AllowUserToDeleteRows = false;
+            this.adgvArchived.AllowUserToOrderColumns = true;
+            this.adgvArchived.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.adgvArchived.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.adgvArchived.FilterAndSortEnabled = true;
+            this.adgvArchived.Location = new System.Drawing.Point(3, 50);
+            this.adgvArchived.Name = "adgvArchived";
+            this.adgvArchived.ReadOnly = true;
+            this.adgvArchived.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.adgvArchived.Size = new System.Drawing.Size(1174, 483);
+            this.adgvArchived.TabIndex = 7;
+            this.adgvArchived.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.adgvArchived_SortStringChanged);
+            this.adgvArchived.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.adgvArchived_FilterStringChanged);
+            // 
             // panelFilter
             // 
             this.panelFilter.Controls.Add(this.btnArchPrs);
-            this.panelFilter.Controls.Add(this.txtBoxFilter);
-            this.panelFilter.Controls.Add(this.lblFilter);
             this.panelFilter.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelFilter.Location = new System.Drawing.Point(3, 16);
             this.panelFilter.Name = "panelFilter";
@@ -275,64 +306,13 @@ namespace PullRequestExtractor
             // 
             // btnArchPrs
             // 
-            this.btnArchPrs.Location = new System.Drawing.Point(877, 5);
+            this.btnArchPrs.Location = new System.Drawing.Point(5, 6);
             this.btnArchPrs.Name = "btnArchPrs";
             this.btnArchPrs.Size = new System.Drawing.Size(66, 23);
             this.btnArchPrs.TabIndex = 5;
             this.btnArchPrs.Text = "Refresh";
             this.btnArchPrs.UseVisualStyleBackColor = true;
             this.btnArchPrs.Click += new System.EventHandler(this.btnArchPrs_Click);
-            // 
-            // txtBoxFilter
-            // 
-            this.txtBoxFilter.Location = new System.Drawing.Point(49, 7);
-            this.txtBoxFilter.Name = "txtBoxFilter";
-            this.txtBoxFilter.Size = new System.Drawing.Size(822, 20);
-            this.txtBoxFilter.TabIndex = 1;
-            this.txtBoxFilter.TextChanged += new System.EventHandler(this.txtBoxFilter_TextChanged);
-            // 
-            // lblFilter
-            // 
-            this.lblFilter.AutoSize = true;
-            this.lblFilter.Location = new System.Drawing.Point(10, 11);
-            this.lblFilter.Name = "lblFilter";
-            this.lblFilter.Size = new System.Drawing.Size(32, 13);
-            this.lblFilter.TabIndex = 0;
-            this.lblFilter.Text = "Filter:";
-            // 
-            // dgvArchived
-            // 
-            this.dgvArchived.AllowUserToAddRows = false;
-            this.dgvArchived.AllowUserToDeleteRows = false;
-            this.dgvArchived.AllowUserToOrderColumns = true;
-            this.dgvArchived.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvArchived.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArchived.Location = new System.Drawing.Point(3, 56);
-            this.dgvArchived.Name = "dgvArchived";
-            this.dgvArchived.ReadOnly = true;
-            this.dgvArchived.Size = new System.Drawing.Size(1174, 480);
-            this.dgvArchived.TabIndex = 4;
-            this.dgvArchived.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvArchived_CellDoubleClick);
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.btnGetActivePRs);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(3, 16);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1174, 34);
-            this.panel1.TabIndex = 7;
-            // 
-            // btnGetActivePRs
-            // 
-            this.btnGetActivePRs.Location = new System.Drawing.Point(6, 7);
-            this.btnGetActivePRs.Name = "btnGetActivePRs";
-            this.btnGetActivePRs.Size = new System.Drawing.Size(67, 23);
-            this.btnGetActivePRs.TabIndex = 2;
-            this.btnGetActivePRs.Text = "Refresh";
-            this.btnGetActivePRs.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -352,16 +332,15 @@ namespace PullRequestExtractor
             this.grpActiveSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPRs)).EndInit();
             this.grpPRs.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.pButtons.ResumeLayout(false);
             this.prexTablControl.ResumeLayout(false);
             this.tcActivePrs.ResumeLayout(false);
             this.tcPrArchive.ResumeLayout(false);
             this.grpBoxArchived.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.adgvArchived)).EndInit();
             this.panelFilter.ResumeLayout(false);
-            this.panelFilter.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArchived)).EndInit();
-            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -387,13 +366,11 @@ namespace PullRequestExtractor
         private System.Windows.Forms.TabPage tcActivePrs;
         private System.Windows.Forms.TabPage tcPrArchive;
         private System.Windows.Forms.GroupBox grpBoxArchived;
-        private System.Windows.Forms.DataGridView dgvArchived;
-        private System.Windows.Forms.Panel panelFilter;
-        private System.Windows.Forms.TextBox txtBoxFilter;
-        private System.Windows.Forms.Label lblFilter;
-        private System.Windows.Forms.Button btnArchPrs;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnGetActivePRs;
+        private Zuby.ADGV.AdvancedDataGridView adgvArchived;
+        private System.Windows.Forms.Panel panelFilter;
+        private System.Windows.Forms.Button btnArchPrs;
     }
 }
 
