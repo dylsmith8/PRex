@@ -100,7 +100,7 @@ namespace PullRequestExtractor
             OpenPullRequestInBrowser(e, dgvPRs);
         }
 
-        private void dgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        private void adgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             OpenPullRequestInBrowser(e, adgvArchived);
         }

@@ -294,6 +294,7 @@ namespace PullRequestExtractor
             this.adgvArchived.TabIndex = 7;
             this.adgvArchived.SortStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.SortEventArgs>(this.adgvArchived_SortStringChanged);
             this.adgvArchived.FilterStringChanged += new System.EventHandler<Zuby.ADGV.AdvancedDataGridView.FilterEventArgs>(this.adgvArchived_FilterStringChanged);
+            this.adgvArchived.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.adgvArchived_CellDoubleClick);
             // 
             // panelFilter
             // 
