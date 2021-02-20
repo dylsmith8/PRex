@@ -23,7 +23,7 @@ namespace PullRequestExtractor
 
             using (MainPresenter presenter = new MainPresenter())
             {
-                IAzureDevOps azureDevOps = new AzureDevOpsAPIManager();
+                IAzureAPI azureDevOps = new AzureDevOpsAPIManager();
                 presenter.Start(azureDevOps);
                 Application.Run();
             }

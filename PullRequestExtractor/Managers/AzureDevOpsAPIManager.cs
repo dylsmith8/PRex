@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using PullRequestExtractor.Helpers;
 using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Models;
 using PullRequestExtractor.Models.PullRequests;
 using System;
 using System.Net;
@@ -11,7 +12,7 @@ using Project = PullRequestExtractor.Models.Projects.Project;
 
 namespace PullRequestExtractor.Managers
 {
-    public class AzureDevOpsAPIManager : IAzureDevOps
+    public class AzureDevOpsAPIManager : IAzureAPI
     {
         private readonly string _pat;
         private readonly string _org;
@@ -92,6 +93,27 @@ namespace PullRequestExtractor.Managers
                         response.EnsureSuccessStatusCode();
                         string responseBody = await response.Content.ReadAsStringAsync();
                         return JsonConvert.DeserializeObject<PullRequest>(responseBody);
+                    }
+                }
+            }, $"Could not connect to the Azure DevOps API. Status Code {(int)statusCode}");
+        }
+
+        public async Task<GitRepository> GetRepositories()
+        {
+            HttpStatusCode statusCode = new HttpStatusCode();
+
+            return await Executor<GitRepository>.TryExecute(async delegate
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = BuildAuthenticationHeader();
+
+                    using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/{_org}/{_project}/_apis/git/repositories?api-version=6.0"))
+                    {
+                        response.EnsureSuccessStatusCode();
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<GitRepository>(responseBody);
                     }
                 }
             }, $"Could not connect to the Azure DevOps API. Status Code {(int)statusCode}");

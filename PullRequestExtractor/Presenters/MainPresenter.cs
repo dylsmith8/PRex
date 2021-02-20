@@ -1,6 +1,8 @@
-﻿using PullRequestExtractor.Interfaces;
+﻿using PullRequestExtractor.Forms;
+using PullRequestExtractor.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -10,40 +12,43 @@ namespace PullRequestExtractor.Presenters
     {
         private bool disposedValue;
         private MainForm _mainForm;
+        private CancellationTokenSource _cancellationTokenSource;
 
-        private IAzureDevOps _azureDevOpsManager;
+        private IAzureAPI _azureDevOpsManager;
 
-        public void Start(IAzureDevOps azureDevOps)
+        public void Start(IAzureAPI azureDevOps)
         {
             _azureDevOpsManager = azureDevOps;
-            _mainForm = new MainForm(azureDevOps.Settings);
+            _cancellationTokenSource = new CancellationTokenSource();
 
-            DoPlumbing();
+            _mainForm = new MainForm(azureDevOps.Settings, _cancellationTokenSource);
+
+            AddControlToTabPage(_mainForm.tcActivePrs, new ActivePullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
+            AddControlToTabPage(_mainForm.tcPrArchive, new ArchivedPullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
+            AddControlToTabPage(_mainForm.tcStats, new StatisticsUC(_azureDevOpsManager));
+
+            DoEventPlumbing();
 
             _mainForm.Show();
         }
 
-        private void DoPlumbing()
+        private void AddControlToTabPage(Control tabPage, Control controlToAdd)
+        {
+            tabPage.Controls.Clear();
+            controlToAdd.Dock = DockStyle.Fill;
+            controlToAdd.Parent = tabPage;
+            tabPage.Controls.Add(controlToAdd);
+        }
+
+        private void DoEventPlumbing()
         {
             _mainForm.Closing += CloseApplication;
-            _mainForm.GetActivePullRequests += _mainForm_GetActivePullRequests;
             _mainForm.GetProjects += _mainForm_GetProjects;
-            _mainForm.GetArchivedPullRequests += _mainForm_GetArchivedPullRequests;
         }
 
         private async Task<Models.Projects.Project> _mainForm_GetProjects()
         {
             return await _azureDevOpsManager.GetAuthedProjectsAsync();
-        }
-
-        private async Task<Models.PullRequests.PullRequest> _mainForm_GetActivePullRequests()
-        {
-            return await _azureDevOpsManager.GetActivePullRequestsAsync();
-        }
-
-        private async Task<Models.PullRequests.PullRequest> _mainForm_GetArchivedPullRequests()
-        {
-            return await _azureDevOpsManager.GetArchivedPullRequestsAsync();
         }
 
         private static void CloseApplication(object sender, CancelEventArgs e)

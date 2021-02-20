@@ -56,29 +56,64 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\ActivePullRequestsUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ActivePullRequestsUC.Designer.cs">
+      <DependentUpon>ActivePullRequestsUC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ArchivedPullRequestsUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ArchivedPullRequestsUC.Designer.cs">
+      <DependentUpon>ArchivedPullRequestsUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\StatisticsUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\StatisticsUC.Designer.cs">
+      <DependentUpon>StatisticsUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\AppSettings.cs" />
     <Compile Include="Helpers\EventLogWriter.cs" />
     <Compile Include="Helpers\Executor.cs" />
     <Compile Include="Helpers\Util.cs" />
+    <Compile Include="Interfaces\IActivePRView.cs" />
     <Compile Include="Interfaces\IAppSettings.cs" />
-    <Compile Include="Interfaces\IAzureDevOps.cs" />
-    <Compile Include="Interfaces\IAzureDevOpsAPIEvents.cs" />
+    <Compile Include="Interfaces\IArchivedPRView.cs" />
+    <Compile Include="Interfaces\IAzureAPI.cs" />
+    <Compile Include="Interfaces\IMainView.cs" />
+    <Compile Include="Interfaces\IStatisticsView.cs" />
     <Compile Include="Managers\AzureDevOpsAPIManager.cs" />
     <Compile Include="Models\CompletedGridSource.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Models\PullRequestGridSource.cs" />
+    <Compile Include="Models\Repository.cs" />
+    <Compile Include="Models\StatisticsGridSource.cs" />
+    <Compile Include="Presenters\ActivePullRequestPresenter.cs" />
+    <Compile Include="Presenters\ArchivedPullRequestPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
+    <Compile Include="Presenters\StatisticsPresenter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Forms\ActivePullRequestsUC.resx">
+      <DependentUpon>ActivePullRequestsUC.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ArchivedPullRequestsUC.resx">
+      <DependentUpon>ArchivedPullRequestsUC.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\StatisticsUC.resx">
+      <DependentUpon>StatisticsUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
