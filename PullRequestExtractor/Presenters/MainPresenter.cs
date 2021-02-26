@@ -15,6 +15,8 @@ namespace PullRequestExtractor.Presenters
         private MainForm _mainForm;
         private CancellationTokenSource _cancellationTokenSource;
 
+        private Action<bool> _setConnectivityError;
+
         private IAzureAPI _azureDevOpsManager;
 
         public void Start()
@@ -23,12 +25,12 @@ namespace PullRequestExtractor.Presenters
             _azureDevOpsManager = new AzureDevOpsAPIManager(_cancellationTokenSource);
 
             _mainForm = new MainForm(_azureDevOpsManager.Settings, _cancellationTokenSource);
-
-            AddControlToTabPage(_mainForm.tcActivePrs, new ActivePullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
-            AddControlToTabPage(_mainForm.tcPrArchive, new ArchivedPullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
-            AddControlToTabPage(_mainForm.tcStats, new StatisticsUC(_azureDevOpsManager));
-
+            
             DoEventPlumbing();
+
+            AddControlToTabPage(_mainForm.tcActivePrs, new ActivePullRequestsUC(_azureDevOpsManager, _cancellationTokenSource, _setConnectivityError));
+            AddControlToTabPage(_mainForm.tcPrArchive, new ArchivedPullRequestsUC(_azureDevOpsManager, _cancellationTokenSource, _setConnectivityError));
+            AddControlToTabPage(_mainForm.tcStats, new StatisticsUC(_azureDevOpsManager));
 
             _mainForm.Show();
         }
@@ -45,6 +47,7 @@ namespace PullRequestExtractor.Presenters
         {
             _mainForm.Closing += CloseApplication;
             _mainForm.GetProjects += _mainForm_GetProjects;
+            _setConnectivityError = _mainForm.SetUISuccessOrFailure;
         }
 
         private async Task<Models.Projects.Project> _mainForm_GetProjects()

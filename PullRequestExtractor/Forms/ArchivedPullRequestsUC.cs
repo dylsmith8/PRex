@@ -3,7 +3,6 @@ using PullRequestExtractor.Interfaces.IArchivedPRView;
 using PullRequestExtractor.Presenters;
 using System;
 using System.Data;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,12 +15,13 @@ namespace PullRequestExtractor.Forms
         public event OpenPullRequestDelegate OpenPullRequest;
 
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly Action<bool> _setConnectivityError;
 
         private readonly int _pollingInterval;
         private readonly string _project;
         private readonly string _org;
 
-        public ArchivedPullRequestsUC(IAzureAPI api, CancellationTokenSource cancellationToken)
+        public ArchivedPullRequestsUC(IAzureAPI api, CancellationTokenSource cancellationToken, Action<bool> setConnectivityError)
         {
             InitializeComponent();
             new ArchivedPullRequestPresenter(this, api);
@@ -40,6 +40,7 @@ namespace PullRequestExtractor.Forms
                 throw new InvalidOperationException("Could not parse the polling interval");
 
             _cancellationTokenSource = cancellationToken;
+            _setConnectivityError = setConnectivityError;
         }
 
         private async void btnArchPrs_Click(object sender, EventArgs e)
@@ -51,6 +52,8 @@ namespace PullRequestExtractor.Forms
                 if (!_cancellationTokenSource.IsCancellationRequested)
                 {
                     prs = await GetArchivedPullRequests?.Invoke();
+
+                    _setConnectivityError(true);
 
                     adgvArchived.DataSource = null;
                     adgvArchived.AutoGenerateColumns = true;
@@ -64,7 +67,8 @@ namespace PullRequestExtractor.Forms
             catch (Exception ex)
             {
                 // some other error happened
-                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\n. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}.\n Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _setConnectivityError(false);
             };
         }
 

@@ -42,15 +42,28 @@ namespace PullRequestExtractor
 
         private async void TestGetProjects_Click(object sender, EventArgs e)
         {
-            Models.Projects.Project projects = await GetProjects?.Invoke();
+            Models.Projects.Project projects = null;
+            try
+            {
+                projects = await GetProjects?.Invoke();
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Authenticated projects:\n");
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("Authenticated projects:\n");
 
-            foreach (var project in projects.value)
-                sb.AppendLine(project.name);
+                foreach (var project in projects.value)
+                    sb.AppendLine(project.name);
 
-            MessageBox.Show(sb.ToString(), "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(sb.ToString());
+            }
+            catch
+            {
+                MessageBox.Show($"Unable to connect to Azure DevOps - check the event viewer", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                SetUISuccessOrFailure(false);
+            }
+
+            if (projects != null && projects.value.Count > 0)
+                SetUISuccessOrFailure(true);
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -72,14 +85,19 @@ namespace PullRequestExtractor
             {
                 projects = await GetProjects?.Invoke();
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\nApp will now terminate. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                _cancellationTokenSource.Cancel();
-                Application.Exit();
+                MessageBox.Show($"Unable to connect to the Azure DevOps API start up - check the event view", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                SetUISuccessOrFailure(false);
             }
 
             if (projects != null && projects.value.Count > 0)
+                SetUISuccessOrFailure(true);
+        }
+
+        public void SetUISuccessOrFailure(bool success)
+        {
+            if (success)
             {
                 lblStatusText.Text = "Success";
                 lblStatusColour.BackColor = Color.LimeGreen;

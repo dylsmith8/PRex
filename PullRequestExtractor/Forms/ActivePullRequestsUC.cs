@@ -15,12 +15,13 @@ namespace PullRequestExtractor.Forms
         public event OpenPullRequestDelegate OpenPullRequest;
 
         private CancellationTokenSource _cancellationTokenSource;
+        private readonly Action<bool> _setConnectivityError;
 
         private readonly int _pollingInterval;
         private readonly string _project;
         private readonly string _org;
 
-        public ActivePullRequestsUC(IAzureAPI api, CancellationTokenSource cancellationToken)
+        public ActivePullRequestsUC(IAzureAPI api, CancellationTokenSource cancellationToken, Action<bool> setConnectivityError)
         {
             InitializeComponent();
             new ActivePullRequestPresenter(this, api);
@@ -39,8 +40,8 @@ namespace PullRequestExtractor.Forms
                 throw new InvalidOperationException("Could not parse the polling interval");
 
             _cancellationTokenSource = cancellationToken;
+            _setConnectivityError = setConnectivityError;
         }
-
 
         private async void ActivePullRequestsUC_Load(object sender, EventArgs e)
         {
@@ -56,18 +57,21 @@ namespace PullRequestExtractor.Forms
             catch (Exception ex)
             {
                 // some other error happened
-                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\n. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                _setConnectivityError(false);
             };
         }
 
-        private async void btnGetActivePRs_Click(object sender, EventArgs e)
+        private void btnGetActivePRs_Click(object sender, EventArgs e)
         {
-            await GetActivePRs(sender, e);
+            ActivePullRequestsUC_Load(sender, e);
         }
 
         private async Task GetActivePRs(object sender, EventArgs e)
         {
             DataTable prs = await GetActivePullRequests?.Invoke();
+
+            _setConnectivityError(true);
 
             dgvPRs.DataSource = null;
             dgvPRs.AutoGenerateColumns = true;
