@@ -1,17 +1,13 @@
-﻿using PullRequestExtractor.Models;
-using PullRequestExtractor.Models.PullRequests;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
+﻿using System.Data;
 using System.Threading.Tasks;
 
-namespace PullRequestExtractor.Interfaces
+namespace PullRequestExtractor.Interfaces.IActivePRView
 {
     public delegate Task<DataTable> GetActivePullRequestsDelegate();
+    public delegate void OpenPullRequestDelegate(string codeReviewId, string repository, string org, string project);
     public interface IActivePRView
     {
         event GetActivePullRequestsDelegate GetActivePullRequests;
+        event OpenPullRequestDelegate OpenPullRequest;
     }
 }

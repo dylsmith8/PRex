@@ -5,7 +5,7 @@ namespace PullRequestExtractor.Helpers
 {
     internal static class Executor<T>
     {
-        internal static async Task<T> TryExecute(Func<Task<T>> func, string error)
+        internal static async Task<T> TryExecute(Func<Task<T>> func)
         {
             try
             {
@@ -13,8 +13,8 @@ namespace PullRequestExtractor.Helpers
             }
             catch (Exception e)
             {
-                EventLogWriter.WriteToEventLog(e, error);
-                throw new Exception(error, e);
+                EventLogWriter.WriteToEventLog(e);
+                throw;
             }
         }
     }

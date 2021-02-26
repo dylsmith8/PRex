@@ -62,6 +62,7 @@ namespace PullRequestExtractor.Forms
             this.dgvPRs.ReadOnly = true;
             this.dgvPRs.Size = new System.Drawing.Size(951, 429);
             this.dgvPRs.TabIndex = 4;
+            this.dgvPRs.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvPRs_CellDoubleClick);
             // 
             // panel1
             // 

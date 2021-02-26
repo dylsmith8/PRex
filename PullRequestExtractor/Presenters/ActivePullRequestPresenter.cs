@@ -1,9 +1,11 @@
 ﻿using PullRequestExtractor.Helpers;
 using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Interfaces.IActivePRView;
 using PullRequestExtractor.Models;
 using PullRequestExtractor.Models.PullRequests;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Tulpep.NotificationWindow;
@@ -13,19 +15,26 @@ namespace PullRequestExtractor.Presenters
     public class ActivePullRequestPresenter
     {
         private readonly IAzureAPI _api;
-        private List<PullRequestGridSource> _seenPullRequests = new List<PullRequestGridSource>();
+        private List<PullRequestGridSource> _seenPullRequests;
 
         public ActivePullRequestPresenter(IActivePRView view, IAzureAPI api)
         {
             _api = api;
-
             view.GetActivePullRequests += View_GetActivePullRequests;
+            view.OpenPullRequest += View_OpenPullRequest;
+            _seenPullRequests = new List<PullRequestGridSource>();
         }
 
         private async Task<DataTable> View_GetActivePullRequests()
         {
             PullRequest pullRequests = await _api.GetActivePullRequestsAsync();
             return ParseActivePullRequestData(pullRequests);
+        }
+
+        private void View_OpenPullRequest(string codeReviewId, string repository, string org, string project)
+        {
+            string uri = $"https://dev.azure.com/{org}/{project}/_git/{repository}/pullrequest/{codeReviewId}";
+            Process.Start(uri);
         }
 
         private DataTable ParseActivePullRequestData(PullRequest prs)
@@ -50,14 +59,11 @@ namespace PullRequestExtractor.Presenters
                 dgvSource.Add(src);
             }
 
-            //if (!isStartup)
-            //{
             var distict = dgvSource.Except(_seenPullRequests, new PullRequestComparer()).ToList();
             if (distict.Count == 1)
                 CreateToast(distict.Single().Title, distict.Single().Author);
             else if (distict.Count >= 2)
                 CreateToast(distict.Count);
-            //}
 
             _seenPullRequests = dgvSource;
             return Util.ToDataTable(_seenPullRequests);

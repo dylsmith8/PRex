@@ -64,6 +64,7 @@ namespace PullRequestExtractor.Forms
             this.adgvArchived.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.adgvArchived.Size = new System.Drawing.Size(998, 319);
             this.adgvArchived.TabIndex = 7;
+            this.adgvArchived.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.adgvArchived_CellDoubleClick);
             // 
             // panelFilter
             // 

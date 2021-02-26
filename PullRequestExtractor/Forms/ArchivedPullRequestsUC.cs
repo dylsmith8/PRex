@@ -1,13 +1,9 @@
 ﻿using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Interfaces.IArchivedPRView;
 using PullRequestExtractor.Presenters;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +13,7 @@ namespace PullRequestExtractor.Forms
     public partial class ArchivedPullRequestsUC : UserControl, IArchivedPRView
     {
         public event GetArchivedPullRequestsDelegate GetArchivedPullRequests;
+        public event OpenPullRequestDelegate OpenPullRequest;
 
         private CancellationTokenSource _cancellationTokenSource;
 
@@ -45,22 +42,6 @@ namespace PullRequestExtractor.Forms
             _cancellationTokenSource = cancellationToken;
         }
 
-        private void adgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            OpenPullRequestInBrowser(e, adgvArchived);
-        }
-
-        private void OpenPullRequestInBrowser(DataGridViewCellEventArgs e, DataGridView dgv)
-        {
-            DataGridViewRow row = dgv.Rows[e.RowIndex];
-            string repo = row.Cells["Repo"]?.Value.ToString();
-            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
-
-            string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
-
-            Process.Start(uri);
-        }
-
         private async void btnArchPrs_Click(object sender, EventArgs e)
         {
             try
@@ -79,11 +60,21 @@ namespace PullRequestExtractor.Forms
                     adgvArchived.Refresh();
                 }                    
             }
-            catch (TaskCanceledException) { MessageBox.Show("Cannot retrieve archived PRs.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            catch (TaskCanceledException) { /* swallow - app is closing */ }
             catch (Exception ex)
             {
+                // some other error happened
                 MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\n. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             };
+        }
+
+        private void adgvArchived_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow row = adgvArchived.Rows[e.RowIndex];
+            string repo = row.Cells["Repo"]?.Value.ToString();
+            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
+
+            OpenPullRequest(codeReviewId, repo, _org, _project);
         }
     }
 }

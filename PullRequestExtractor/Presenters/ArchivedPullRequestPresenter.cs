@@ -1,13 +1,12 @@
-﻿using PullRequestExtractor.Forms;
-using PullRequestExtractor.Helpers;
+﻿using PullRequestExtractor.Helpers;
 using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Interfaces.IArchivedPRView;
 using PullRequestExtractor.Models;
 using PullRequestExtractor.Models.PullRequests;
-using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PullRequestExtractor.Presenters
@@ -20,13 +19,20 @@ namespace PullRequestExtractor.Presenters
         {
             _api = api;
 
-            view.GetArchivedPullRequests += View_GetArchivedPullRequests; ;
+            view.GetArchivedPullRequests += View_GetArchivedPullRequests;
+            view.OpenPullRequest += View_OpenPullRequest;
         }
 
         private async Task<DataTable> View_GetArchivedPullRequests()
         {
             PullRequest pullRequest = await _api.GetArchivedPullRequestsAsync();
             return ParseArchivedPullRequests(pullRequest);
+        }
+
+        private void View_OpenPullRequest(string codeReviewId, string repository, string org, string project)
+        {
+            string uri = $"https://dev.azure.com/{org}/{project}/_git/{repository}/pullrequest/{codeReviewId}";
+            Process.Start(uri);
         }
 
         private DataTable ParseArchivedPullRequests(PullRequest prs)
@@ -56,9 +62,7 @@ namespace PullRequestExtractor.Presenters
             }
 
             dgvSource.OrderByDescending(x => x.CreationDate);
-            return Util.ToDataTable(dgvSource);
-
-            
+            return Util.ToDataTable(dgvSource);          
         }
     }
 }

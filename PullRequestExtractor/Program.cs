@@ -1,11 +1,7 @@
-﻿using PullRequestExtractor.Helpers;
-using PullRequestExtractor.Interfaces;
+﻿using PullRequestExtractor.Interfaces;
 using PullRequestExtractor.Managers;
 using PullRequestExtractor.Presenters;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PullRequestExtractor
@@ -23,8 +19,7 @@ namespace PullRequestExtractor
 
             using (MainPresenter presenter = new MainPresenter())
             {
-                IAzureAPI azureDevOps = new AzureDevOpsAPIManager();
-                presenter.Start(azureDevOps);
+                presenter.Start();
                 Application.Run();
             }
         }

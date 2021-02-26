@@ -1,13 +1,8 @@
 ﻿using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Interfaces.IActivePRView;
 using PullRequestExtractor.Presenters;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +12,8 @@ namespace PullRequestExtractor.Forms
     public partial class ActivePullRequestsUC : UserControl, IActivePRView
     {
         public event GetActivePullRequestsDelegate GetActivePullRequests;
+        public event OpenPullRequestDelegate OpenPullRequest;
+
         private CancellationTokenSource _cancellationTokenSource;
 
         private readonly int _pollingInterval;
@@ -44,29 +41,23 @@ namespace PullRequestExtractor.Forms
             _cancellationTokenSource = cancellationToken;
         }
 
-        private void dgvPRs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            OpenPullRequestInBrowser(e, dgvPRs);
-        }
 
         private async void ActivePullRequestsUC_Load(object sender, EventArgs e)
         {
-            while (!_cancellationTokenSource.IsCancellationRequested)
+            try
             {
-                await GetActivePRs(sender, e);
-                await Task.Delay(_pollingInterval, _cancellationTokenSource.Token);
+                while (!_cancellationTokenSource.IsCancellationRequested)
+                {
+                    await GetActivePRs(sender, e);
+                    await Task.Delay(_pollingInterval, _cancellationTokenSource.Token);
+                }
             }
-        }
-
-        private void OpenPullRequestInBrowser(DataGridViewCellEventArgs e, DataGridView dgv)
-        {
-            DataGridViewRow row = dgv.Rows[e.RowIndex];
-            string repo = row.Cells["Repo"]?.Value.ToString();
-            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
-
-            string uri = $"https://dev.azure.com/{_org}/{_project}/_git/{repo}/pullrequest/{codeReviewId}";
-
-            Process.Start(uri);
+            catch (TaskCanceledException) { /* swallow - app is closing */ }
+            catch (Exception ex)
+            {
+                // some other error happened
+                MessageBox.Show($"{ex.Message}\n{ex.InnerException.Message}\n\n. Check the Windows Event Viewer for more information.", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            };
         }
 
         private async void btnGetActivePRs_Click(object sender, EventArgs e)
@@ -85,6 +76,15 @@ namespace PullRequestExtractor.Forms
             var dgvBindingSource = new BindingSource(prs, null);
             dgvPRs.DataSource = dgvBindingSource;
             dgvPRs.Refresh();
+        }
+
+        private void dgvPRs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow row = dgvPRs.Rows[e.RowIndex];
+            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
+            string repo = row.Cells["Repo"]?.Value.ToString();
+
+            OpenPullRequest(codeReviewId, repo, _org, _project);
         }
     }
 }

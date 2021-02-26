@@ -1,5 +1,6 @@
 ﻿using PullRequestExtractor.Forms;
 using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Managers;
 using System;
 using System.ComponentModel;
 using System.Threading;
@@ -16,12 +17,12 @@ namespace PullRequestExtractor.Presenters
 
         private IAzureAPI _azureDevOpsManager;
 
-        public void Start(IAzureAPI azureDevOps)
+        public void Start()
         {
-            _azureDevOpsManager = azureDevOps;
             _cancellationTokenSource = new CancellationTokenSource();
+            _azureDevOpsManager = new AzureDevOpsAPIManager(_cancellationTokenSource);
 
-            _mainForm = new MainForm(azureDevOps.Settings, _cancellationTokenSource);
+            _mainForm = new MainForm(_azureDevOpsManager.Settings, _cancellationTokenSource);
 
             AddControlToTabPage(_mainForm.tcActivePrs, new ActivePullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
             AddControlToTabPage(_mainForm.tcPrArchive, new ArchivedPullRequestsUC(_azureDevOpsManager, _cancellationTokenSource));
@@ -54,9 +55,7 @@ namespace PullRequestExtractor.Presenters
         private static void CloseApplication(object sender, CancelEventArgs e)
         {
             if (!e.Cancel)
-            {
                 Application.Exit(e);
-            }
         }
 
         protected virtual void Dispose(bool disposing)

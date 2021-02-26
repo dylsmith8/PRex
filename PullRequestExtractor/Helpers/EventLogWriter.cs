@@ -5,7 +5,7 @@ namespace PullRequestExtractor.Helpers
 {
     internal static class EventLogWriter
     {
-        internal static void WriteToEventLog(Exception exception, string errorMessage)
+        internal static void WriteToEventLog(Exception exception)
         {
             if (exception == null)
                 throw new ArgumentNullException(nameof(exception));
@@ -23,7 +23,7 @@ namespace PullRequestExtractor.Helpers
                 }
 
                 eventLog.Source = "PRex";
-                eventLog.WriteEntry($"{errorMessage}\n {exception}", EventLogEntryType.Error);
+                eventLog.WriteEntry(exception.ToString(), EventLogEntryType.Error);
             }
         }
     }
