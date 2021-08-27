@@ -24,7 +24,7 @@ namespace PullRequestExtractor.Presenters
             _cancellationTokenSource = new CancellationTokenSource();
             _azureDevOpsManager = new AzureDevOpsAPIManager(_cancellationTokenSource);
 
-            _mainForm = new MainForm(_azureDevOpsManager.Settings, _cancellationTokenSource);
+            _mainForm = new MainForm(_azureDevOpsManager, _cancellationTokenSource);
             
             DoEventPlumbing();
 
@@ -46,13 +46,13 @@ namespace PullRequestExtractor.Presenters
         private void DoEventPlumbing()
         {
             _mainForm.Closing += CloseApplication;
-            _mainForm.GetProjects += _mainForm_GetProjects;
+            _mainForm.Ping += _mainForm_Ping;
             _setConnectivityError = _mainForm.SetUISuccessOrFailure;
         }
 
-        private async Task<Models.Projects.Project> _mainForm_GetProjects()
+        private async Task<bool> _mainForm_Ping()
         {
-            return await _azureDevOpsManager.GetAuthedProjectsAsync();
+            return await _azureDevOpsManager.Ping();
         }
 
         private static void CloseApplication(object sender, CancelEventArgs e)

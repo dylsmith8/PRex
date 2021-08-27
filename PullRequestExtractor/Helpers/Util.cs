@@ -26,5 +26,15 @@ namespace PullRequestExtractor.Helpers
 
             return table;
         }
+
+        internal static DataTable StringListToDataTable(List<string> list)
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Project Name", typeof(string));
+            foreach (string item in list)
+                dt.Rows.Add(item);
+
+            return dt;
+        }
     }
 }

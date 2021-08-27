@@ -1,4 +1,6 @@
-﻿using PullRequestExtractor.Interfaces;
+﻿using PullRequestExtractor.Forms;
+using PullRequestExtractor.Interfaces;
+using PullRequestExtractor.Managers;
 using System;
 using System.Drawing;
 using System.Text;
@@ -12,24 +14,27 @@ namespace PullRequestExtractor
         private readonly string _project;
         private readonly string _org;
 
-        public event GetProjectsDelegate GetProjects;
-
+        private readonly IAzureAPI _api;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public MainForm(IAppSettings appSettings, CancellationTokenSource cancellationTokenSource)
-        {
-            if (appSettings == null)
-                throw new ArgumentNullException(nameof(appSettings));
+        public event PingAzureAsync Ping;
 
-            if (!appSettings.TryGetAppSetting("ActiveProject", out _project))
+        public MainForm(IAzureAPI api, CancellationTokenSource cancellationTokenSource)
+        {
+            if (api == null)
+                throw new ArgumentNullException(nameof(api));
+
+            if (!api.Settings.TryGetAppSetting("ActiveProject", out _project))
                 throw new InvalidOperationException("Could not find a valid personal access token for Azure DevOps");
 
-            if (!appSettings.TryGetAppSetting("Org", out _org))
+            if (!api.Settings.TryGetAppSetting("Org", out _org))
                 throw new InvalidOperationException("Could not find an Organisation for Azure DevOps");
 
             string pollingInterval;
-            if (!appSettings.TryGetAppSetting("PollingInterval", out pollingInterval))
+            if (!api.Settings.TryGetAppSetting("PollingInterval", out pollingInterval))
                 throw new InvalidOperationException("Could not find a valid polling interval");
+
+            _api = api;
 
             InitializeComponent();
             lblOrgPlaceHolder.Text = _org;
@@ -42,28 +47,8 @@ namespace PullRequestExtractor
 
         private async void TestGetProjects_Click(object sender, EventArgs e)
         {
-            Models.Projects.Project projects = null;
-            try
-            {
-                projects = await GetProjects?.Invoke();
-
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("Authenticated projects:\n");
-
-                foreach (var project in projects.value)
-                    sb.AppendLine(project.name);
-
-                MessageBox.Show(sb.ToString());
-            }
-            catch
-            {
-                MessageBox.Show($"Unable to connect to Azure DevOps - check the event viewer", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                SetUISuccessOrFailure(false);
-            }
-
-            if (projects != null && projects.value.Count > 0)
-                SetUISuccessOrFailure(true);
+            using (SubscribedProjectsForm frm = new SubscribedProjectsForm(_api, _cancellationTokenSource))
+                frm.ShowDialog();            
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -79,20 +64,17 @@ namespace PullRequestExtractor
 
         private async void MainForm_Load(object sender, EventArgs e)
         {
-            Models.Projects.Project projects = null;
-
             try
             {
-                projects = await GetProjects?.Invoke();
+                bool authed = await Ping?.Invoke();
+                if (!authed)
+                    SetUISuccessOrFailure(false);
             }
             catch
             {
                 MessageBox.Show($"Unable to connect to the Azure DevOps API start up - check the event view", "Connection error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 SetUISuccessOrFailure(false);
             }
-
-            if (projects != null && projects.value.Count > 0)
-                SetUISuccessOrFailure(true);
         }
 
         public void SetUISuccessOrFailure(bool success)

@@ -42,12 +42,11 @@ namespace PullRequestExtractor
             this.lblOrg = new System.Windows.Forms.Label();
             this.btnExit = new System.Windows.Forms.Button();
             this.pButtons = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.prexTablControl = new System.Windows.Forms.TabControl();
+            this.tcActivePrs = new System.Windows.Forms.TabPage();
             this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.tcStats = new System.Windows.Forms.TabPage();
-            this.tcActivePrs = new System.Windows.Forms.TabPage();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.grpActiveSettings.SuspendLayout();
             this.pButtons.SuspendLayout();
@@ -59,9 +58,9 @@ namespace PullRequestExtractor
             // 
             this.button1.Location = new System.Drawing.Point(271, 61);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(123, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "Get Projects";
+            this.button1.Text = "Get Subbed Projects";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.TestGetProjects_Click);
             // 
@@ -158,7 +157,6 @@ namespace PullRequestExtractor
             // 
             // pButtons
             // 
-            this.pButtons.Controls.Add(this.button2);
             this.pButtons.Controls.Add(this.btnExit);
             this.pButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pButtons.Location = new System.Drawing.Point(0, 668);
@@ -188,6 +186,16 @@ namespace PullRequestExtractor
             this.prexTablControl.Size = new System.Drawing.Size(1194, 568);
             this.prexTablControl.TabIndex = 5;
             // 
+            // tcActivePrs
+            // 
+            this.tcActivePrs.Location = new System.Drawing.Point(4, 22);
+            this.tcActivePrs.Name = "tcActivePrs";
+            this.tcActivePrs.Padding = new System.Windows.Forms.Padding(3);
+            this.tcActivePrs.Size = new System.Drawing.Size(1186, 542);
+            this.tcActivePrs.TabIndex = 0;
+            this.tcActivePrs.Text = "Active Pull Requests";
+            this.tcActivePrs.UseVisualStyleBackColor = true;
+            // 
             // tcPrArchive
             // 
             this.tcPrArchive.Location = new System.Drawing.Point(4, 22);
@@ -198,25 +206,15 @@ namespace PullRequestExtractor
             this.tcPrArchive.Text = "Archived";
             this.tcPrArchive.UseVisualStyleBackColor = true;
             // 
-            // tbStats
+            // tcStats
             // 
             this.tcStats.Location = new System.Drawing.Point(4, 22);
-            this.tcStats.Name = "tbStats";
+            this.tcStats.Name = "tcStats";
             this.tcStats.Padding = new System.Windows.Forms.Padding(3);
             this.tcStats.Size = new System.Drawing.Size(1186, 542);
             this.tcStats.TabIndex = 2;
             this.tcStats.Text = "Statistics";
             this.tcStats.UseVisualStyleBackColor = true;
-            // 
-            // tcActivePrs
-            // 
-            this.tcActivePrs.Location = new System.Drawing.Point(4, 22);
-            this.tcActivePrs.Name = "tcActivePrs";
-            this.tcActivePrs.Padding = new System.Windows.Forms.Padding(3);
-            this.tcActivePrs.Size = new System.Drawing.Size(1186, 542);
-            this.tcActivePrs.TabIndex = 0;
-            this.tcActivePrs.Text = "Active Pull Requests";
-            this.tcActivePrs.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -260,7 +258,6 @@ namespace PullRequestExtractor
         public System.Windows.Forms.TabPage tcPrArchive;
         public System.Windows.Forms.TabPage tcStats;
         public System.Windows.Forms.TabPage tcActivePrs;
-        private System.Windows.Forms.Button button2;
     }
 }
 

@@ -13,5 +13,6 @@ namespace PullRequestExtractor.Interfaces
         Task<PullRequest> GetActivePullRequestsAsync();
         Task<PullRequest> GetArchivedPullRequestsAsync();
         Task<GitRepository> GetRepositories();
+        Task<bool> Ping();
     }
 }

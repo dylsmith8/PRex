@@ -117,6 +117,12 @@ namespace PullRequestExtractor.Managers
             });
         }
 
+        public async Task<bool> Ping()
+        {
+            var authed = await GetAuthedProjectsAsync();
+            return authed.count != 0;
+        }
+
         private AuthenticationHeaderValue BuildAuthenticationHeader()
         {
             return new AuthenticationHeaderValue("Basic",
@@ -125,6 +131,6 @@ namespace PullRequestExtractor.Managers
                         string.Format("{0}:{1}", string.Empty, _pat))
                     )
                 );
-        }
+        }       
     }
 }
