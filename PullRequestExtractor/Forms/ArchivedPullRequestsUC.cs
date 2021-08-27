@@ -76,7 +76,7 @@ namespace PullRequestExtractor.Forms
         {
             DataGridViewRow row = adgvArchived.Rows[e.RowIndex];
             string repo = row.Cells["Repo"]?.Value.ToString();
-            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
+            string codeReviewId = row.Cells["PullRequestId"]?.Value.ToString();
 
             OpenPullRequest(codeReviewId, repo, _org, _project);
         }

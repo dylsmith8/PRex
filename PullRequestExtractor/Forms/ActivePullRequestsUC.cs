@@ -85,7 +85,7 @@ namespace PullRequestExtractor.Forms
         private void dgvPRs_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewRow row = dgvPRs.Rows[e.RowIndex];
-            string codeReviewId = row.Cells["CodeReviewId"]?.Value.ToString();
+            string codeReviewId = row.Cells["PullRequestId"]?.Value.ToString();
             string repo = row.Cells["Repo"]?.Value.ToString();
 
             OpenPullRequest(codeReviewId, repo, _org, _project);

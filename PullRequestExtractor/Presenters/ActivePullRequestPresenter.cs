@@ -45,7 +45,7 @@ namespace PullRequestExtractor.Presenters
             {
                 var src = new PullRequestGridSource
                 {
-                    CodeReviewId = pr.codeReviewId.ToString(),
+                    PullRequestId = pr.pullRequestId.ToString(),
                     Title = pr.title,
                     Repo = pr.repository.name,
                     CreationDate = pr.creationDate.ToLocalTime().ToString(),

@@ -15,7 +15,7 @@ namespace PullRequestExtractor.Models
         public string Reviewers { get; set; }
         public string SourceBranch { get; set; }
         public string TargetBranch { get; set; }
-        public string CodeReviewId { get; set; }
+        public string PullRequestId { get; set; }
     }
 
     public class PullRequestComparer : IEqualityComparer<PullRequestGridSource>
@@ -26,7 +26,7 @@ namespace PullRequestExtractor.Models
                 return true;
             else if (x == null || y == null)
                 return false;
-            else if (x.CodeReviewId.Equals(y.CodeReviewId))
+            else if (x.PullRequestId.Equals(y.PullRequestId))
                 return true;
             else
                 return false;
@@ -34,7 +34,7 @@ namespace PullRequestExtractor.Models
 
         public int GetHashCode(PullRequestGridSource obj)
         {
-            return obj.CodeReviewId.GetHashCode();
+            return obj.PullRequestId.GetHashCode();
         }
     }
 }
