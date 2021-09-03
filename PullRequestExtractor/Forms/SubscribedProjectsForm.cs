@@ -20,6 +20,7 @@ namespace PullRequestExtractor.Forms
             new SubscribedProjectsPresenter(this, api);
 
             _cancellationTokenSource = cancellationToken;
+            adgvSubbed.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private async void SubscribedProjects_Load(object sender, EventArgs e)

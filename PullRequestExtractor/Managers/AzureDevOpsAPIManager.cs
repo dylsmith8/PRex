@@ -2,6 +2,7 @@
 using PullRequestExtractor.Helpers;
 using PullRequestExtractor.Interfaces;
 using PullRequestExtractor.Models;
+using PullRequestExtractor.Models.BranchDetails;
 using PullRequestExtractor.Models.PullRequests;
 using System;
 using System.Net;
@@ -121,6 +122,25 @@ namespace PullRequestExtractor.Managers
         {
             var authed = await GetAuthedProjectsAsync();
             return authed.count != 0;
+        }
+
+        public async Task<Branch> GetBranches(Guid repositoryId, Guid projectId)
+        {
+            return await Executor<Branch>.TryExecute(async delegate
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = BuildAuthenticationHeader();
+
+                    using (HttpResponseMessage response = await client.GetAsync($"https://dev.azure.com/SDWORX/{projectId}/_apis/git/repositories/{repositoryId}/refs"))
+                    {
+                        response.EnsureSuccessStatusCode();
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        return JsonConvert.DeserializeObject<Branch>(responseBody);
+                    }
+                }
+            });
         }
 
         private AuthenticationHeaderValue BuildAuthenticationHeader()

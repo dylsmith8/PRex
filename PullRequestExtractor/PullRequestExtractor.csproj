@@ -102,6 +102,18 @@
     <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\RepositoryBranchesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RepositoryBranchesForm.Designer.cs">
+      <DependentUpon>RepositoryBranchesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReposUC.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\ReposUC.Designer.cs">
+      <DependentUpon>ReposUC.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\StatisticsUC.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -122,19 +134,26 @@
     <Compile Include="Interfaces\IAppSettings.cs" />
     <Compile Include="Interfaces\IArchivedPRView.cs" />
     <Compile Include="Interfaces\IAzureAPI.cs" />
+    <Compile Include="Interfaces\IBranchesView.cs" />
     <Compile Include="Interfaces\IGetSubscribedProjects.cs" />
     <Compile Include="Interfaces\IMainView.cs" />
+    <Compile Include="Interfaces\IRepositoriesView.cs" />
     <Compile Include="Interfaces\IStatisticsView.cs" />
     <Compile Include="Managers\AzureDevOpsAPIManager.cs" />
+    <Compile Include="Models\BranchDetails.cs" />
+    <Compile Include="Models\BranchGridSource.cs" />
     <Compile Include="Models\CompletedGridSource.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\PullRequest.cs" />
     <Compile Include="Models\PullRequestGridSource.cs" />
     <Compile Include="Models\Repository.cs" />
+    <Compile Include="Models\RepositoryDetail.cs" />
     <Compile Include="Models\StatisticsGridSource.cs" />
     <Compile Include="Presenters\ActivePullRequestPresenter.cs" />
     <Compile Include="Presenters\ArchivedPullRequestPresenter.cs" />
+    <Compile Include="Presenters\BranchesPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
+    <Compile Include="Presenters\RepositoriesPresenter.cs" />
     <Compile Include="Presenters\StatisticsPresenter.cs" />
     <Compile Include="Presenters\SubscribedProjectsPresenter.cs" />
     <Compile Include="Program.cs" />
@@ -147,6 +166,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RepositoryBranchesForm.resx">
+      <DependentUpon>RepositoryBranchesForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReposUC.resx">
+      <DependentUpon>ReposUC.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\StatisticsUC.resx">
       <DependentUpon>StatisticsUC.cs</DependentUpon>

@@ -31,6 +31,7 @@ namespace PullRequestExtractor.Presenters
             AddControlToTabPage(_mainForm.tcActivePrs, new ActivePullRequestsUC(_azureDevOpsManager, _cancellationTokenSource, _setConnectivityError));
             AddControlToTabPage(_mainForm.tcPrArchive, new ArchivedPullRequestsUC(_azureDevOpsManager, _cancellationTokenSource, _setConnectivityError));
             AddControlToTabPage(_mainForm.tcStats, new StatisticsUC(_azureDevOpsManager));
+            AddControlToTabPage(_mainForm.tcRepos, new ReposUC(_azureDevOpsManager, _cancellationTokenSource, _setConnectivityError));
 
             _mainForm.Show();
         }

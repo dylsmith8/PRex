@@ -48,6 +48,7 @@ namespace PullRequestExtractor
             this.tcPrArchive = new System.Windows.Forms.TabPage();
             this.tcStats = new System.Windows.Forms.TabPage();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.tcRepos = new System.Windows.Forms.TabPage();
             this.grpActiveSettings.SuspendLayout();
             this.pButtons.SuspendLayout();
             this.prexTablControl.SuspendLayout();
@@ -179,6 +180,7 @@ namespace PullRequestExtractor
             this.prexTablControl.Controls.Add(this.tcActivePrs);
             this.prexTablControl.Controls.Add(this.tcPrArchive);
             this.prexTablControl.Controls.Add(this.tcStats);
+            this.prexTablControl.Controls.Add(this.tcRepos);
             this.prexTablControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.prexTablControl.Location = new System.Drawing.Point(0, 100);
             this.prexTablControl.Name = "prexTablControl";
@@ -215,6 +217,15 @@ namespace PullRequestExtractor
             this.tcStats.TabIndex = 2;
             this.tcStats.Text = "Statistics";
             this.tcStats.UseVisualStyleBackColor = true;
+            // 
+            // tcRepos
+            // 
+            this.tcRepos.Location = new System.Drawing.Point(4, 22);
+            this.tcRepos.Name = "tcRepos";
+            this.tcRepos.Size = new System.Drawing.Size(1186, 542);
+            this.tcRepos.TabIndex = 3;
+            this.tcRepos.Text = "Repositories";
+            this.tcRepos.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -258,6 +269,7 @@ namespace PullRequestExtractor
         public System.Windows.Forms.TabPage tcPrArchive;
         public System.Windows.Forms.TabPage tcStats;
         public System.Windows.Forms.TabPage tcActivePrs;
+        public System.Windows.Forms.TabPage tcRepos;
     }
 }
 
